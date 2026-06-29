@@ -21,3 +21,10 @@ class Cell:
         if pos not in wall_map:
             raise ValueError("Invalid wall submitted for deletion. Must be N, E, S or W")
         self.walls &= ~(1 << wall_map[pos])
+    
+    def is_wall_open(self, pos: str) -> bool:
+        if pos not in wall_map:
+            raise ValueError("Invalid wall submitted for deletion. Must be N, E, S or W")
+        if (self.walls & (1 << wall_map[pos])) == 0:
+            return True
+        return False
