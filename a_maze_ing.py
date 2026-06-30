@@ -1,5 +1,6 @@
 import sys
-
+from random import Random
+from mazegen import Maze, visit
 
 def parse_config(file_path: str) -> dict[str, str]:
     content: dict[str, str] = {}
@@ -138,6 +139,19 @@ def main() -> None:
             output_file,
             perfect,
         ) = validate(content)
+
+        print(width, height, entry_coords, exit_coords)
+        rng: Random = Random()
+        maze:Maze = Maze(width, height, entry_coords, exit_coords)
+        print(maze.width, maze.height, maze.entry, maze.exit)
+        row = rng.randrange(maze.height)
+        col = rng.randrange(maze.width)
+        print(len(maze.matrix))
+        print(row, col)
+        first = maze.matrix[row][col]
+        visit(maze, first, None, rng)
+
+
     except ValueError as error:
         print(error)
         sys.exit(1)
@@ -147,6 +161,8 @@ def main() -> None:
     print(f"Entry: {entry_coords}, Exit: {exit_coords}")
     print(f"Output file: {output_file}")
     print(f"Perfect maze: {perfect}")
+    print()
+    print(maze.get_hex_maze)
 
 
 if __name__ == "__main__":

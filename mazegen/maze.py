@@ -1,4 +1,4 @@
-from cell import Cell
+from .cell import Cell
 
 class Maze:
     def __init__(self, width: int, height: int, entry: tuple[int, int], exit: tuple[int, int]) -> None:
@@ -7,8 +7,8 @@ class Maze:
         self.entry: tuple[int, int] = entry
         self.exit: tuple[int, int] = exit
         self.matrix: list[list[Cell]] = []
-        self.cells: list[Cell] = []
         self.validate_input()
+        self.init_maze()
     
     def get_hex_maze(self) -> list[list[int]]:
         return [
@@ -25,6 +25,12 @@ class Maze:
             raise ValueError ("Exit is outside maze bounds")
         if self.entry == self.exit:
             raise ValueError("Entry and Exit must be different")
+    
+    def init_maze(self):
+        for row in range(self.height - 1):
+            for col in range(self.width -1):
+                print(row, col)
+                self.matrix[row][col] = Cell(row, col)
 
     def is_in_matrix(self, pos: tuple[int, int]) -> bool:
         row, col = pos
