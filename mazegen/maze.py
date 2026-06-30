@@ -6,7 +6,8 @@ class Maze:
         self.height = height
         self.entry: tuple[int, int] = entry
         self.exit: tuple[int, int] = exit
-        self.matrix: list[list[Cell]] = []
+        self.matrix: list[list[Cell]] = [[None for _ in range(self.width)]
+                                         for _ in range(self.height)]
         self.validate_input()
         self.init_maze()
     
@@ -15,6 +16,11 @@ class Maze:
             [cell.walls for cell in row]
             for row in self.matrix
             ]
+    
+    def print_hex_maze(self) -> None:
+        hex_maze = self.get_hex_maze()
+        for row in self.matrix:
+            print([f"{cell.walls:X}" for cell in row])
     
     def validate_input(self) -> None:
         if self.width <= 0 or self.height <= 0:
@@ -27,9 +33,10 @@ class Maze:
             raise ValueError("Entry and Exit must be different")
     
     def init_maze(self):
-        for row in range(self.height - 1):
-            for col in range(self.width -1):
-                print(row, col)
+        for row in range(self.height):
+            matrix_row = []
+            for col in range(self.width):
+                matrix_col = Cell(row, col)
                 self.matrix[row][col] = Cell(row, col)
 
     def is_in_matrix(self, pos: tuple[int, int]) -> bool:
