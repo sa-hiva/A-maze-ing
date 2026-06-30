@@ -146,8 +146,6 @@ def main() -> None:
         print(maze.width, maze.height, maze.entry, maze.exit)
         row = rng.randrange(maze.height)
         col = rng.randrange(maze.width)
-        print(len(maze.matrix))
-        print(row, col)
         first = maze.matrix[row][col]
         visit(maze, first, None, rng)
 
@@ -162,7 +160,7 @@ def main() -> None:
     print(f"Output file: {output_file}")
     print(f"Perfect maze: {perfect}")
     print()
-    print(maze.get_hex_maze)
+    maze.print_hex_maze()
 
 
 if __name__ == "__main__":
