@@ -1,6 +1,6 @@
 from random import Random
-from cell import Cell, wall_map
-from maze import Maze
+from .cell import Cell, wall_map
+from .maze import Maze
 
 
 def visit(maze: Maze, current: Cell, previous: Cell, rng: Random):
