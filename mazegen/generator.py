@@ -14,3 +14,15 @@ def visit(maze: Maze, current: Cell, previous: Cell, rng: Random):
     rng.shuffle(neighbors)
     for neighbor in neighbors:
         visit(maze,neighbor, current, rng)
+
+def advance(maze: Maze, current: Cell, previous: Cell, rng: Random):
+    if current.visited:
+        return
+    current.visited = True
+    current.previous = previous
+    if maze.is_exit(current):
+        return current
+    neighbors = maze.get_valid_unvisited_neighbors(current)
+    rng.shuffle(neighbors)
+    for neighbor in neighbors:
+        visit(maze,neighbor, current, rng)

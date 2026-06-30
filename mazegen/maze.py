@@ -1,26 +1,27 @@
 from .cell import Cell
+from random import Random
 
 class Maze:
-    def __init__(self, width: int, height: int, entry: tuple[int, int], exit: tuple[int, int]) -> None:
+    def __init__(self, width: int, height: int, entry: tuple[int, int], exit: tuple[int, int], seed: int| None) -> None:
         self.width = width
         self.height = height
         self.entry: tuple[int, int] = entry
         self.exit: tuple[int, int] = exit
         self.matrix: list[list[Cell]] = [[None for _ in range(self.width)]
                                          for _ in range(self.height)]
+        self.rng: Random = Random(seed) if seed else Random() 
         self.validate_input()
         self.init_maze()
     
-    def get_hex_maze(self) -> list[list[int]]:
-        return [
-            [cell.walls for cell in row]
-            for row in self.matrix
-            ]
-    
-    def print_hex_maze(self) -> None:
-        hex_maze = self.get_hex_maze()
+
+    def get_maze_as_str(self) -> str:
+        str_maze: str = ""
         for row in self.matrix:
-            print([f"{cell.walls:X}" for cell in row])
+            for cell in row:
+                str_maze += f"{cell.walls:X}"
+            str_maze += "\n"
+        return str_maze
+    
     
     def validate_input(self) -> None:
         if self.width <= 0 or self.height <= 0:
@@ -34,9 +35,7 @@ class Maze:
     
     def init_maze(self):
         for row in range(self.height):
-            matrix_row = []
             for col in range(self.width):
-                matrix_col = Cell(row, col)
                 self.matrix[row][col] = Cell(row, col)
 
     def is_in_matrix(self, pos: tuple[int, int]) -> bool:
@@ -102,3 +101,16 @@ class Maze:
             if self.is_way_open(neighbor, cell):
                 valid_neighbors.append(neighbor)
         return valid_neighbors
+    
+
+    def generate(self, height: int | None = None,width: int | None = None) -> None:
+        from .generator import visit
+
+        if height is None:
+            height = self.height
+        if width is None:
+            width = self.width
+        row = self.rng.randrange(height)
+        col = self.rng.randrange(width)
+        first = self.matrix[row][col]
+        visit(self, first, None, self.rng)
