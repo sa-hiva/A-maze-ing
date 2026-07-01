@@ -3,6 +3,9 @@ from random import Random
 from mazegen import Maze
 from utils import parse_config, validate, save_maze_output
 
+__all__ = ["Random"]
+
+
 def main() -> None:
     if len(sys.argv) != 2:
         print("Usage: python3 a_maze_ing.py <config_file>")
@@ -23,8 +26,6 @@ def main() -> None:
         maze.generate()
         print(maze.get_maze_as_str())
         save_maze_output(output_file, maze)
-
-
 
     except ValueError as error:
         print(error)

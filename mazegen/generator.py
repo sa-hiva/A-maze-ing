@@ -2,6 +2,8 @@ from random import Random
 from .cell import Cell, wall_map
 from .maze import Maze
 
+__all__ = ["wall_map"]
+
 
 def visit(maze: Maze, current: Cell, previous: Cell, rng: Random):
     if current.visited:
@@ -13,7 +15,8 @@ def visit(maze: Maze, current: Cell, previous: Cell, rng: Random):
     neighbors = maze.get_unvisited_neighbors(current)
     rng.shuffle(neighbors)
     for neighbor in neighbors:
-        visit(maze,neighbor, current, rng)
+        visit(maze, neighbor, current, rng)
+
 
 def advance(maze: Maze, current: Cell, previous: Cell, rng: Random):
     if current.visited:
@@ -25,4 +28,4 @@ def advance(maze: Maze, current: Cell, previous: Cell, rng: Random):
     neighbors = maze.get_valid_unvisited_neighbors(current)
     rng.shuffle(neighbors)
     for neighbor in neighbors:
-        visit(maze,neighbor, current, rng)
+        visit(maze, neighbor, current, rng)

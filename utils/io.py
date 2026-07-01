@@ -1,6 +1,9 @@
 import sys
 from mazegen import Maze
 
+__all__ = [sys.argc]
+
+
 def parse_config(file_path: str) -> dict[str, str]:
     content: dict[str, str] = {}
 
@@ -42,6 +45,7 @@ def parse_config(file_path: str) -> dict[str, str]:
 
     return content
 
+
 def save_maze_output(file_path: str, maze: Maze) -> None:
     try:
         with open(file_path, "w") as file:
@@ -55,4 +59,3 @@ def save_maze_output(file_path: str, maze: Maze) -> None:
         raise PermissionError(
             f"Error: Permission denied writing output file "
             f"'{file_path}'") from error
-
