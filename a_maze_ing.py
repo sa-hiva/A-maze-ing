@@ -2,6 +2,7 @@ import sys
 from random import Random
 from mazegen import Maze
 from utils import parse_config, validate, save_maze_output
+from visual import show_maze
 
 __all__ = ["Random"]
 
@@ -26,6 +27,7 @@ def main() -> None:
         maze.generate()
         print(maze.get_maze_as_str())
         save_maze_output(output_file, maze)
+        show_maze(maze)
 
     except ValueError as error:
         print(error)
