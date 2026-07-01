@@ -1,8 +1,6 @@
 import sys
 from mazegen import Maze
 
-__all__ = [sys.argc]
-
 
 def parse_config(file_path: str) -> dict[str, str]:
     content: dict[str, str] = {}
