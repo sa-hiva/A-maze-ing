@@ -3,14 +3,20 @@ from random import Random
 
 
 class Maze:
-    def __init__(self, width: int, height: int, entry: tuple[int, int],
-                 exit: tuple[int, int], seed: int | None) -> None:
+    def __init__(self, width: int,
+                 height: int,
+                 entry: tuple[int, int],
+                 exit: tuple[int, int],
+                 seed: int | None = None
+                 ) -> None:
+
         self.width = width
         self.height = height
         self.entry: tuple[int, int] = entry
         self.exit: tuple[int, int] = exit
         self.matrix: list[list[Cell]] = [[None for _ in range(self.width)]
                                          for _ in range(self.height)]
+        self.solution: str
         self.rng: Random = Random(seed) if seed else Random()
         self.validate_input()
         self.init_maze()
@@ -34,9 +40,19 @@ class Maze:
             raise ValueError("Entry and Exit must be different")
 
     def init_maze(self):
+        self.solution = ""
         for row in range(self.height):
             for col in range(self.width):
                 self.matrix[row][col] = Cell(row, col)
+
+    def clear_visited(self) -> None:
+        for row in range(self.height):
+            for col in range(self.width):
+                self.matrix[row][col].visited = False
+                self.matrix[row][col].previous = None
+
+    def get_cell(self, row: int, col: int) -> Cell:
+        return self.matrix[row][col]
 
     def is_in_matrix(self, pos: tuple[int, int]) -> bool:
         row, col = pos
@@ -102,10 +118,12 @@ class Maze:
                 valid_neighbors.append(neighbor)
         return valid_neighbors
 
-    def generate(self, height: int | None = None, width: int | None = None
+    def generate(self,
+                 height: int | None = None,
+                 width: int | None = None
                  ) -> None:
-        from .generator import visit
 
+        from .generator import visit
         if height is None:
             height = self.height
         if width is None:
@@ -114,3 +132,8 @@ class Maze:
         col = self.rng.randrange(width)
         first = self.matrix[row][col]
         visit(self, first, None, self.rng)
+        self.clear_visited()
+
+    def solve(self) -> None:
+        from .generator import solve_maze
+        self.solution = solve_maze(self)

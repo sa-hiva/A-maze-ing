@@ -1,4 +1,3 @@
-import sys
 from mazegen import Maze
 
 
@@ -52,6 +51,9 @@ def save_maze_output(file_path: str, maze: Maze) -> None:
             file.write(f"{maze.entry[0]},{maze.entry[1]}")
             file.write("\n")
             file.write(f"{maze.exit[0]},{maze.exit[1]}")
+            file.write("\n")
+            file.write(maze.solution)
+            file.write("\n")
 
     except PermissionError as error:
         raise PermissionError(

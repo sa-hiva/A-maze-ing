@@ -1,10 +1,10 @@
 import sys
-from random import Random
 from mazegen import Maze
 from utils import parse_config, validate, save_maze_output
 from visual import show_maze
 
 __all__ = ["Random"]
+
 
 
 def main() -> None:
@@ -23,9 +23,12 @@ def main() -> None:
             perfect,
         ) = validate(content)
 
-        maze: Maze = Maze(width, height, entry_coords, exit_coords, 30)
+        maze: Maze = Maze(width, height, entry_coords, exit_coords)
         maze.generate()
         print(maze.get_maze_as_str())
+        print()
+        maze.solve()
+        print(maze.solution)
         save_maze_output(output_file, maze)
         show_maze(maze)
 
@@ -33,12 +36,12 @@ def main() -> None:
         print(error)
         sys.exit(1)
 
-    print("=== VALID CONFIG ===")
-    print(f"Width: {width}, Height: {height}")
-    print(f"Entry: {entry_coords}, Exit: {exit_coords}")
-    print(f"Output file: {output_file}")
-    print(f"Perfect maze: {perfect}")
-    print()
+    # print("=== VALID CONFIG ===")
+    # print(f"Width: {width}, Height: {height}")
+    # print(f"Entry: {entry_coords}, Exit: {exit_coords}")
+    # print(f"Output file: {output_file}")
+    # print(f"Perfect maze: {perfect}")
+    # print()
 
 
 if __name__ == "__main__":
