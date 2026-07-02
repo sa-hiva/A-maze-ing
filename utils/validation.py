@@ -1,4 +1,4 @@
-import sys
+
 
 def validate(
     content: dict[str, str]
