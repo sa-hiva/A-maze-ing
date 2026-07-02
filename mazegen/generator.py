@@ -33,6 +33,7 @@ def solve_maze(maze: Maze) -> str:
         for neighbor in neighbors:
             neighbor.previous = current
             explored_queue.append(neighbor)
+
     if not maze.is_exit(current):
         raise ValueError("ERROR: Exit unreachable")
     cell_path: list[Cell] = []

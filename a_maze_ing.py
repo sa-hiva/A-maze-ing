@@ -25,8 +25,6 @@ def main() -> None:
 
         maze: Maze = Maze(width, height, entry_coords, exit_coords)
         maze.generate()
-        print(maze.get_maze_as_str())
-        print()
         maze.solve()
         print(maze.solution)
         save_maze_output(output_file, maze)
