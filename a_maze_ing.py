@@ -1,6 +1,10 @@
 import sys
 from mazegen import Maze
 from utils import parse_config, validate, save_maze_output
+from visual import show_maze
+
+__all__ = ["Random"]
+
 
 
 def main() -> None:
@@ -26,6 +30,7 @@ def main() -> None:
         maze.solve()
         print(maze.solution)
         save_maze_output(output_file, maze)
+        show_maze(maze)
 
     except ValueError as error:
         print(error)

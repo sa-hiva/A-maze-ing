@@ -1,5 +1,6 @@
 
 
+
 def validate(
     content: dict[str, str]
 ) -> tuple[int, int, tuple[int, int], tuple[int, int], str, bool]:
