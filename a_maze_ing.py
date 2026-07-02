@@ -1,5 +1,6 @@
 import sys
 from mazegen import Maze
+from mazegen.solver import solve_maze
 from utils import parse_config, validate, save_maze_output
 from visual import show_maze
 
@@ -25,10 +26,10 @@ def main() -> None:
 
         maze: Maze = Maze(width, height, entry_coords, exit_coords)
         maze.generate()
-        maze.solve()
-        print(maze.solution)
-        save_maze_output(output_file, maze)
-        show_maze(maze)
+        # maze.solve()
+        # print(maze.solution)
+        # save_maze_output(output_file, maze)
+        show_maze(maze, solve_maze(maze))
 
     except ValueError as error:
         print(error)

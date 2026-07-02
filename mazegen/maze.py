@@ -134,6 +134,6 @@ class Maze:
         visit(self, first, None, self.rng)
         self.clear_visited()
 
-    def solve(self) -> None:
-        from .generator import solve_maze
-        self.solution = solve_maze(self)
+    # def solve(self) -> None:
+    #     from .generator import solve_maze
+    #     self.solution = solve_maze(self)
