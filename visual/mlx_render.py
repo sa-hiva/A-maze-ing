@@ -1,11 +1,13 @@
-from mazegen import Maze
+from mazegen import Maze, Cell
 
 
-def cell_label(maze: Maze, row: int, col: int) -> str:
+def cell_label(maze: Maze, row: int, col: int, path: list[Cell]) -> str:
     if (row, col) == maze.entry:
         return " 0 "
-    if (row, col) == maze.exit:
-        return " X "
+    elif (row, col) == maze.exit:
+        return " 0 "
+    elif (maze.matrix[row][col] in path):
+        return " · "
     return "   "
 
 
@@ -22,7 +24,7 @@ def top_border(maze: Maze) -> str:
     return "".join(parts)
 
 
-def row_content(maze: Maze, row: int) -> str:
+def row_content(maze: Maze, row: int, path: list[Cell]) -> str:
     parts: list[str] = []
 
     for col in range(maze.width):
@@ -34,7 +36,7 @@ def row_content(maze: Maze, row: int) -> str:
             else:
                 parts.append("|")
 
-        parts.append(cell_label(maze, row, col))
+        parts.append(cell_label(maze, row, col, path))
 
         if cell.is_wall_open("E"):
             parts.append(" ")
@@ -58,17 +60,17 @@ def row_bottom(maze: Maze, row: int) -> str:
     return "".join(parts)
 
 
-def build_ascii_maze(maze: Maze) -> str:
+def build_ascii_maze(maze: Maze, path: list[Cell]) -> str:
     lines: list[str] = [top_border(maze)]
 
     for row in range(maze.height):
-        lines.append(row_content(maze, row))
+        lines.append(row_content(maze, row, path))
         lines.append(row_bottom(maze, row))
 
     return "\n".join(lines)
 
 
-def show_maze(maze: Maze) -> None:
+def show_maze(maze: Maze, path: list[Cell]) -> None:
     print()
-    print(build_ascii_maze(maze))
+    print(build_ascii_maze(maze, path))
     print()
