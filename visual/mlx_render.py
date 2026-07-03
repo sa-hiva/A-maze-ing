@@ -1,4 +1,5 @@
 from mazegen import Maze, Cell
+import time
 
 
 def cell_label(
@@ -10,6 +11,7 @@ def cell_label(
         return " 0 "
     elif (maze.matrix[row][col] in path):
         if solved is True:
+            time.sleep(0.01)  # this is shit, does not work as intended
             return " ¤ "
         return "   "
     elif (maze.matrix[row][col].is_pattern):
