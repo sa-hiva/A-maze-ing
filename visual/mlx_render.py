@@ -1,13 +1,17 @@
 from mazegen import Maze, Cell
 
 
-def cell_label(maze: Maze, row: int, col: int, path: list[Cell]) -> str:
+def cell_label(
+        maze: Maze, row: int, col: int,
+        path: list[Cell], solved: bool) -> str:
     if (row, col) == maze.entry:
         return " 0 "
     elif (row, col) == maze.exit:
         return " 0 "
     elif (maze.matrix[row][col] in path):
-        return " · "
+        if solved is True:
+                return " · "
+        return "   "
     elif (maze.matrix[row][col].is_pattern):
         return "▓▓▓"
     return "   "
@@ -28,7 +32,7 @@ def top_border(maze: Maze) -> str:
     return "".join(parts)
 
 
-def row_content(maze: Maze, row: int, path: list[Cell]) -> str:
+def row_content(maze: Maze, row: int, path: list[Cell], solved: bool) -> str:
     parts: list[str] = []
 
     for col in range(maze.width):
@@ -40,7 +44,7 @@ def row_content(maze: Maze, row: int, path: list[Cell]) -> str:
             else:
                 parts.append("║")
 
-        parts.append(cell_label(maze, row, col, path))
+        parts.append(cell_label(maze, row, col, path, solved))
 
         if cell.is_wall_open("E"):
             parts.append(" ")
@@ -66,17 +70,17 @@ def row_bottom(maze: Maze, row: int) -> str:
     return "".join(parts)
 
 
-def build_ascii_maze(maze: Maze, path: list[Cell]) -> str:
+def build_ascii_maze(maze: Maze, path: list[Cell], solved: bool) -> str:
     lines: list[str] = [top_border(maze)]
 
     for row in range(maze.height):
-        lines.append(row_content(maze, row, path))
+        lines.append(row_content(maze, row, path, solved))
         lines.append(row_bottom(maze, row))
 
     return "\n".join(lines)
 
 
-def show_maze(maze: Maze, path: list[Cell]) -> None:
+def show_maze(maze: Maze, path: list[Cell], solved: bool) -> None:
     print()
-    print(build_ascii_maze(maze, path))
+    print(build_ascii_maze(maze, path, solved))
     print()

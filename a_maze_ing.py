@@ -4,8 +4,7 @@ from mazegen.solver import solve_maze
 from utils import parse_config, validate, save_maze_output
 from visual import show_maze
 
-__all__ = ["Random"]
-
+__all__ = ["save_maze_output"]
 
 
 def main() -> None:
@@ -29,18 +28,46 @@ def main() -> None:
         # maze.solve()
         # print(maze.solution)
         # save_maze_output(output_file, maze)
-        show_maze(maze, solve_maze(maze))
+        path = solve_maze(maze)
+        solved = False
+        show_maze(maze, path, solved)
 
     except ValueError as error:
         print(error)
         sys.exit(1)
 
-    # print("=== VALID CONFIG ===")
-    # print(f"Width: {width}, Height: {height}")
-    # print(f"Entry: {entry_coords}, Exit: {exit_coords}")
-    # print(f"Output file: {output_file}")
-    # print(f"Perfect maze: {perfect}")
-    # print()
+    while True:
+        print()
+        print("=== MENU ===")
+        print()
+        print("1. New maze")
+        print("2. Show/Hide path")
+        print("3. Some other shit I'm forgetting")
+        print("4. Exit")
+        print()
+
+        try:
+            choice = input("Select an option: ").strip()
+        except (EOFError, KeyboardInterrupt):
+            print("[ERROR] Bye!")
+            sys.exit(0)
+
+        if choice == "1":
+            print("WIP")
+
+        elif choice == "2":
+            solved = not solved
+            show_maze(maze, path, solved)
+
+        elif choice == "3":
+            print("nada")
+
+        elif choice == "4":
+            print("Bye bitch!")
+            break
+
+        else:
+            print("Invalid option, please try again.")
 
 
 if __name__ == "__main__":

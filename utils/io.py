@@ -33,10 +33,10 @@ def parse_config(file_path: str) -> dict[str, str]:
                 content[key] = value
 
     except FileNotFoundError as error:
-        raise ValueError(
+        raise FileNotFoundError(
             f"Error: Configuration file '{file_path}' not found") from error
     except PermissionError as error:
-        raise ValueError(
+        raise PermissionError(
             f"Error: Permission denied reading configuration file "
             f"'{file_path}'") from error
 
