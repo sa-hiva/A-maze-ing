@@ -10,7 +10,7 @@ def cell_label(
         return " 0 "
     elif (maze.matrix[row][col] in path):
         if solved is True:
-                return " · "
+            return " · "
         return "   "
     elif (maze.matrix[row][col].is_pattern):
         return "▓▓▓"

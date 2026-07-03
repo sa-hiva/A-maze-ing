@@ -24,7 +24,8 @@ def main() -> None:
         ) = validate(content)
 
         generator = MazeGenerator(30)
-        maze: Maze = generator.generate(width, height, entry_coords, exit_coords)
+        maze: Maze = generator.generate(width, height, 
+                                        entry_coords, exit_coords)
         save_maze_output(output_file, maze)
         path = solve_maze(maze)
         solved = False
