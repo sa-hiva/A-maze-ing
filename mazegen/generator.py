@@ -10,9 +10,10 @@ class MazeGenerator():
     def generate(self, width: int,
                  height: int,
                  entry: tuple[int, int],
-                 exit: tuple[int, int]
+                 exit: tuple[int, int],
+                 perfect: bool
                  ) -> None:
-        maze: Maze = Maze(width, height, entry, exit)
+        maze: Maze = Maze(width, height, entry, exit, perfect)
         add_pattern(maze)
         row = self.rng.randrange(height)
         col = self.rng.randrange(width)

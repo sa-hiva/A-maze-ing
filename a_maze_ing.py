@@ -24,8 +24,8 @@ def main() -> None:
         ) = validate(content)
 
         generator = MazeGenerator()
-        maze: Maze = generator.generate(width, height,
-                                        entry_coords, exit_coords)
+        maze: Maze = generator.generate(width, height, entry_coords,
+                                        exit_coords, perfect)
         # maze.solve()
         # print(maze.solution)
         # save_maze_output(output_file, maze)
@@ -64,7 +64,7 @@ def main() -> None:
             print("nada")
 
         elif choice == "4":
-            print("Bye bitch!")
+            print("Bye bitch!\n")
             break
 
         else:
