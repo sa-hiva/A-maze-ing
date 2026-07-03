@@ -36,12 +36,6 @@ class Maze:
         if self.entry == self.exit:
             raise ValueError("Entry and Exit must be different")
 
-    def init_maze(self):
-        self.solution = ""
-        for row in range(self.height):
-            for col in range(self.width):
-                self.matrix[row][col] = Cell(row, col)
-
     def clear_visited(self) -> None:
         for row in range(self.height):
             for col in range(self.width):
