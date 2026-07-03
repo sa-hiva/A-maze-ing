@@ -2,7 +2,6 @@ from random import Random
 from .cell import Cell
 from .maze import Maze
 
-__all__ = ["wall_map"]
 
 class MazeGenerator():
     def __init__(self, seed: int | None = None) -> None:
@@ -32,7 +31,7 @@ def add_pattern(maze: Maze) -> None:
         print("Maze size too small: 42 pattern will be ommited")
         return
     row: int = maze.height // 2 + maze.height % 2 - 3
-    col: int  = maze.width // 2 + maze.height % 2 - 4
+    col: int = maze.width // 2 + maze.height % 2 - 4
     pattern = ("  # ###",
                " #    #",
                "###  # ",
@@ -45,8 +44,6 @@ def add_pattern(maze: Maze) -> None:
             if cell.is_pattern:
                 cell.visited = True
 
-        
-    
 
 def visit(maze: Maze, current: Cell, previous: Cell, rng: Random) -> None:
     if current.visited:

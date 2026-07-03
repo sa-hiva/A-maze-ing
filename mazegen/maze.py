@@ -93,7 +93,6 @@ class Maze:
             return (old.is_wall_open('E') and new.is_wall_open('W'))
         return False
 
-
     def get_unvisited_neighbors(self, cell: Cell) -> list[Cell]:
         neighbors: list[Cell] = []
         row = cell.row
@@ -115,23 +114,3 @@ class Maze:
             if self.is_way_open(neighbor, cell):
                 valid_neighbors.append(neighbor)
         return valid_neighbors
-
-    # def generate(self,
-    #              height: int | None = None,
-    #              width: int | None = None
-    #              ) -> None:
-
-    #     from .generator import visit
-    #     if height is None:
-    #         height = self.height
-    #     if width is None:
-    #         width = self.width
-    #     row = self.rng.randrange(height)
-    #     col = self.rng.randrange(width)
-    #     first = self.matrix[row][col]
-    #     visit(self, first, None, self.rng)
-    #     self.clear_visited()
-
-    # def solve(self) -> None:
-    #     from .generator import solve_maze
-    #     self.solution = solve_maze(self)
