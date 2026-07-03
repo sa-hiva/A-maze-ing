@@ -8,18 +8,22 @@ def cell_label(maze: Maze, row: int, col: int, path: list[Cell]) -> str:
         return " 0 "
     elif (maze.matrix[row][col] in path):
         return " · "
+    elif (maze.matrix[row][col].is_pattern):
+        return "▓▓▓"
     return "   "
 
 
 def top_border(maze: Maze) -> str:
-    parts: list[str] = ["+"]
+    parts: list[str] = ["╔"]
 
     for col in range(maze.width):
         cell = maze.matrix[0][col]
         if cell.is_wall_open("N"):
             parts.append("   +")
+        elif col == maze.width - 1:
+            parts.append("═══╗")
         else:
-            parts.append("---+")
+            parts.append("════")
 
     return "".join(parts)
 
@@ -34,28 +38,30 @@ def row_content(maze: Maze, row: int, path: list[Cell]) -> str:
             if cell.is_wall_open("W"):
                 parts.append(" ")
             else:
-                parts.append("|")
+                parts.append("║")
 
         parts.append(cell_label(maze, row, col, path))
 
         if cell.is_wall_open("E"):
             parts.append(" ")
         else:
-            parts.append("|")
+            parts.append("║")
 
     return "".join(parts)
 
 
 def row_bottom(maze: Maze, row: int) -> str:
-    parts: list[str] = ["+"]
+    parts: list[str] = ["╚"] if row == maze.height - 1 else ["║"]
 
     for col in range(maze.width):
         cell = maze.matrix[row][col]
 
         if cell.is_wall_open("S"):
             parts.append("   +")
+        elif col == maze.width - 1:
+            parts.append("═══╝")
         else:
-            parts.append("---+")
+            parts.append("═══╩")
 
     return "".join(parts)
 

@@ -1,13 +1,11 @@
 from .cell import Cell
-from random import Random
 
 
 class Maze:
     def __init__(self, width: int,
                  height: int,
                  entry: tuple[int, int],
-                 exit: tuple[int, int],
-                 seed: int | None = None
+                 exit: tuple[int, int]
                  ) -> None:
 
         self.width = width
@@ -17,7 +15,6 @@ class Maze:
         self.matrix: list[list[Cell]] = [[None for _ in range(self.width)]
                                          for _ in range(self.height)]
         self.solution: str
-        self.rng: Random = Random(seed) if seed else Random()
         self.validate_input()
         self.init_maze()
 
@@ -96,6 +93,7 @@ class Maze:
             return (old.is_wall_open('E') and new.is_wall_open('W'))
         return False
 
+
     def get_unvisited_neighbors(self, cell: Cell) -> list[Cell]:
         neighbors: list[Cell] = []
         row = cell.row
@@ -118,21 +116,21 @@ class Maze:
                 valid_neighbors.append(neighbor)
         return valid_neighbors
 
-    def generate(self,
-                 height: int | None = None,
-                 width: int | None = None
-                 ) -> None:
+    # def generate(self,
+    #              height: int | None = None,
+    #              width: int | None = None
+    #              ) -> None:
 
-        from .generator import visit
-        if height is None:
-            height = self.height
-        if width is None:
-            width = self.width
-        row = self.rng.randrange(height)
-        col = self.rng.randrange(width)
-        first = self.matrix[row][col]
-        visit(self, first, None, self.rng)
-        self.clear_visited()
+    #     from .generator import visit
+    #     if height is None:
+    #         height = self.height
+    #     if width is None:
+    #         width = self.width
+    #     row = self.rng.randrange(height)
+    #     col = self.rng.randrange(width)
+    #     first = self.matrix[row][col]
+    #     visit(self, first, None, self.rng)
+    #     self.clear_visited()
 
     # def solve(self) -> None:
     #     from .generator import solve_maze

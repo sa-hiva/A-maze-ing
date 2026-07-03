@@ -1,5 +1,5 @@
 import sys
-from mazegen import Maze
+from mazegen import Maze, MazeGenerator
 from mazegen.solver import solve_maze
 from utils import parse_config, validate, save_maze_output
 from visual import show_maze
@@ -24,8 +24,8 @@ def main() -> None:
             perfect,
         ) = validate(content)
 
-        maze: Maze = Maze(width, height, entry_coords, exit_coords)
-        maze.generate()
+        generator = MazeGenerator()
+        maze: Maze = generator.generate(width, height, entry_coords, exit_coords)
         # maze.solve()
         # print(maze.solution)
         # save_maze_output(output_file, maze)
