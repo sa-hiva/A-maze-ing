@@ -5,7 +5,8 @@ class Maze:
     def __init__(self, width: int,
                  height: int,
                  entry: tuple[int, int],
-                 exit: tuple[int, int]
+                 exit: tuple[int, int],
+                 perfect: bool = False
                  ) -> None:
 
         self.width = width
@@ -15,6 +16,7 @@ class Maze:
         self.matrix: list[list[Cell]] = [[None for _ in range(self.width)]
                                          for _ in range(self.height)]
         self.solution: str
+        self.perfect = perfect
         self.validate_input()
         self.init_maze()
 
@@ -35,6 +37,11 @@ class Maze:
             raise ValueError("Exit is outside maze bounds")
         if self.entry == self.exit:
             raise ValueError("Entry and Exit must be different")
+
+    def init_maze(self):
+        for row in range(self.height):
+            for col in range(self.width):
+                self.matrix[row][col] = Cell(row, col)
 
     def clear_visited(self) -> None:
         for row in range(self.height):

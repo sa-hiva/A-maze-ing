@@ -1,4 +1,7 @@
 from mazegen import Maze, Cell
+import time
+
+__all__ = ["time"]
 
 
 def cell_label(
@@ -10,7 +13,7 @@ def cell_label(
         return " 0 "
     elif (maze.matrix[row][col] in path):
         if solved is True:
-                return " · "
+            return " · "
         return "   "
     elif (maze.matrix[row][col].is_pattern):
         return "███"
@@ -62,18 +65,18 @@ def row_bottom(maze: Maze, row: int) -> str:
         cell = maze.matrix[row][col]
         if col == 0:
             manage_first_column_bottom(cell, maze, row, parts)
-
-        if cell.is_wall_open("S"): 
+        if cell.is_wall_open("S"):
             parts.append("   ")
         else:
             parts.append("═══")
-        
+
         if col == maze.width - 1:
             manage_last_column_bottom(cell, maze, row, parts)
         else:
             manage_connections_bottom(cell, maze, row, col, parts)
 
     return "".join(parts)
+
 
 def manage_first_column_bottom(
     cell: Cell,
@@ -123,9 +126,14 @@ def bottom_border(maze: Maze) -> str:
             parts.append("╩")
 
     return "".join(parts)
-        
 
-def manage_connections_bottom(cell: Cell, maze: Maze, row: int, col: int, parts: list[str]) -> None:
+
+def manage_connections_bottom(cell: Cell,
+                              maze: Maze,
+                              row: int,
+                              col: int,
+                              parts: list[str]
+                              ) -> None:
     right: Cell = maze.matrix[row][col + 1]
     bottom: Cell = maze.matrix[row + 1][col]
     current_south = not cell.is_wall_open("S")
@@ -133,39 +141,32 @@ def manage_connections_bottom(cell: Cell, maze: Maze, row: int, col: int, parts:
     bottom_east = not bottom.is_wall_open("E")
     right_south = not right.is_wall_open("S")
 
-    key = (
-        current_south,
-        current_east,
-        bottom_east,
-        right_south,
-    )
+    key = (current_south, current_east, bottom_east, right_south)
 
     junctions = {
-    # (CS, CE, BE, RS)
+                # (CS, CE, BE, RS)
+                (False, False, False, False): " ",
+                (True,  False, False, False): "═",
+                (False, True,  False, False): "║",
+                (True,  True,  False, False): "╝",
 
-    (False, False, False, False): " ",
-    (True,  False, False, False): "═",
-    (False, True,  False, False): "║",
-    (True,  True,  False, False): "╝",
+                (False, False, True,  False): "║",
+                (True,  False, True,  False): "╗",
+                (False, True,  True,  False): "║",
+                (True,  True,  True,  False): "╣",
 
-    (False, False, True,  False): "║",
-    (True,  False, True,  False): "╗",
-    (False, True,  True,  False): "║",
-    (True,  True,  True,  False): "╣",
+                (False, False, False, True): "═",
+                (True,  False, False, True): "═",
+                (False, True,  False, True): "╚",
+                (True,  True,  False, True): "╩",
 
-    (False, False, False, True ): "═",
-    (True,  False, False, True ): "═",
-    (False, True,  False, True ): "╚",
-    (True,  True,  False, True ): "╩",
-
-    (False, False, True,  True ): "╔",
-    (True,  False, True,  True ): "╦",
-    (False, True,  True,  True ): "╠",
-    (True,  True,  True,  True ): "╬",
-    }
+                (False, False, True,  True): "╔",
+                (True,  False, True,  True): "╦",
+                (False, True,  True,  True): "╠",
+                (True,  True,  True,  True): "╬",
+                }
 
     parts.append(junctions[key])
-   
 
 
 def build_ascii_maze(maze: Maze, path: list[Cell], solved: bool) -> str:
@@ -175,7 +176,7 @@ def build_ascii_maze(maze: Maze, path: list[Cell], solved: bool) -> str:
         lines.append(row_content(maze, row, path, solved))
         if row < maze.height - 1:
             lines.append(row_bottom(maze, row))
-        else: 
+        else:
             lines.append(bottom_border(maze))
     return "\n".join(lines)
 

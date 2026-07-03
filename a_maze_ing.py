@@ -1,4 +1,5 @@
 import sys
+import os
 from mazegen import Maze, MazeGenerator
 from mazegen.solver import solve_maze
 from utils import parse_config, validate, save_maze_output
@@ -24,9 +25,11 @@ def main() -> None:
         ) = validate(content)
 
         generator = MazeGenerator()
-        maze: Maze = generator.generate(width, height, 
-                                        entry_coords, exit_coords)
-        save_maze_output(output_file, maze)
+        maze: Maze = generator.generate(width, height, entry_coords,
+                                        exit_coords, perfect)
+        # maze.solve()
+        # print(maze.solution)
+        # save_maze_output(output_file, maze)
         path = solve_maze(maze)
         solved = False
         show_maze(maze, path, solved)
@@ -42,8 +45,7 @@ def main() -> None:
         print("1. New maze")
         print("2. Show/Hide path")
         print("3. Some other shit I'm forgetting")
-        print("4. Exit")
-        print()
+        print("4. Exit\n")
 
         try:
             choice = input("Select an option: ").strip()
@@ -52,7 +54,12 @@ def main() -> None:
             sys.exit(0)
 
         if choice == "1":
-            print("WIP")
+            os.system("clear")
+            maze = generator.generate(width, height, entry_coords,
+                                      exit_coords, perfect)
+            path = solve_maze(maze)
+            solved = False
+            show_maze(maze, path, solved)
 
         elif choice == "2":
             solved = not solved
@@ -62,7 +69,7 @@ def main() -> None:
             print("nada")
 
         elif choice == "4":
-            print("Bye bitch!")
+            print("Bye bitch!\n")
             break
 
         else:
