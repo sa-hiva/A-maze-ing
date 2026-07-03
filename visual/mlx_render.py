@@ -26,6 +26,8 @@ def top_border(maze: Maze) -> str:
             parts.append("   +")
         elif col == maze.width - 1:
             parts.append("═══╗")
+        elif not cell.is_wall_open("W"):
+            parts.append("═══=")
         else:
             parts.append("════")
 
