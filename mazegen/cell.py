@@ -11,6 +11,7 @@ class Cell:
         self.visited: bool = False
         self.previous: Cell | None = None
         self.walls: int = 0xF
+        self.is_pattern: bool = False
 
     @staticmethod
     def validate(row: int, col: int) -> bool:
