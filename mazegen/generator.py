@@ -2,8 +2,6 @@ from random import Random
 from .cell import Cell
 from .maze import Maze
 
-__all__ = ["wall_map"]
-
 
 def visit(maze: Maze, current: Cell, previous: Cell, rng: Random) -> None:
     if current.visited:

@@ -3,6 +3,8 @@ from .maze import Maze
 from random import Random
 from collections import deque
 
+__all__ = ["Random"]
+
 
 def solve_maze(maze: Maze) -> list[Cell]:
     first: Cell = maze.matrix[maze.entry[0]][maze.entry[1]]
