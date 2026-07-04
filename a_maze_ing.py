@@ -44,7 +44,7 @@ def main() -> None:
         sys.exit(1)
 
     while True:
-        draw_interface(maze, path, solved)
+        draw_interface(maze, path, solved, animate_gen, animate_sol)
 
         try:
             choice = input("Select an option: ").strip()
@@ -54,13 +54,16 @@ def main() -> None:
 
         if choice == "1":
             clear_screen()
+            solved = False
             maze, frames = generator.generate(width, height, entry_coords,
                                               exit_coords, perfect)
+            if animate_gen:
+                animate_generation(frames, path, solved)
             path = solve_maze(maze)
             solved = False
 
         elif choice == "2":
-            clear_screen()
+            # clear_screen()
             solved = not solved
             if animate_sol and solved:
                 animate_path(maze, path, solved)
@@ -69,6 +72,12 @@ def main() -> None:
             print("nada")
 
         elif choice == "4":
+            animate_gen = not animate_gen
+
+        elif choice == "5":
+            animate_sol = not animate_sol
+
+        elif choice == "6":
             print("Bye bitch!\n")
             break
 
@@ -76,7 +85,8 @@ def main() -> None:
             print("Invalid option, please try again.")
 
 
-def draw_interface(maze: Maze, path: list[Cell], solved: bool) -> None:
+def draw_interface(maze: Maze, path: list[Cell], solved: bool,
+                   animate_gen: bool, animate_sol: bool) -> None:
     print("\033[2J\033[H", end="")
     show_maze(maze, path, solved)
 
@@ -86,7 +96,11 @@ def draw_interface(maze: Maze, path: list[Cell], solved: bool) -> None:
     print("1. New maze")
     print("2. Show/Hide path")
     print("3. Some other shit I'm forgetting")
-    print("4. Exit\n")
+    print(f"4. Enable/Disable generator animations "
+          f"(Current: {"On" if animate_gen else "Off"})")
+    print(f"5. Enable/Disable path animations "
+          f"(Current: {"On" if animate_sol else "Off"})")
+    print("6. Exit\n")
 
 
 if __name__ == "__main__":
