@@ -13,20 +13,39 @@ class Maze:
         self.height = height
         self.entry: tuple[int, int] = entry
         self.exit: tuple[int, int] = exit
-        self.matrix: list[list[Cell]] = [[None for _ in range(self.width)]
-                                         for _ in range(self.height)]
+        self.matrix: list[list[Cell]] = [
+            [Cell(row, col) for col in range(self.width)]
+            for row in range(self.height)]
         self.solution: str
         self.perfect = perfect
         self.validate_input()
-        self.init_maze()
 
-    def get_maze_as_str(self) -> str:
+    def to_hex_str(self) -> str:
         str_maze: str = ""
         for row in self.matrix:
             for cell in row:
                 str_maze += f"{cell.walls:X}"
             str_maze += "\n"
         return str_maze
+
+    @classmethod
+    def from_hex_str(cls,
+                     text: str,
+                     entry: tuple[int, int],
+                     exit: tuple[int, int],
+                     perfect: bool = False,
+                     ) -> "Maze":
+
+        lines = text.strip().splitlines()
+        height = len(lines)
+        width = len(lines[0])
+        if any(len(line) != width for line in lines):
+            raise ValueError("Maze is not rectangular")
+        maze = cls(width, height, entry, exit, perfect)
+        for row, line in enumerate(lines):
+            for col, char in enumerate(line):
+                maze.matrix[row][col].walls = int(char, 16)
+        return maze
 
     def validate_input(self) -> None:
         if self.width <= 0 or self.height <= 0:
@@ -37,11 +56,6 @@ class Maze:
             raise ValueError("Exit is outside maze bounds")
         if self.entry == self.exit:
             raise ValueError("Entry and Exit must be different")
-
-    def init_maze(self):
-        for row in range(self.height):
-            for col in range(self.width):
-                self.matrix[row][col] = Cell(row, col)
 
     def clear_visited(self) -> None:
         for row in range(self.height):
@@ -115,3 +129,14 @@ class Maze:
             if self.is_way_open(neighbor, cell):
                 valid_neighbors.append(neighbor)
         return valid_neighbors
+
+    def clone(self) -> "Maze":
+        from .generator import add_pattern
+        maze: "Maze" = Maze.from_hex_str(
+            self.to_hex_str(),
+            self.entry,
+            self.exit,
+            self.perfect,
+        )
+        add_pattern(maze)
+        return maze

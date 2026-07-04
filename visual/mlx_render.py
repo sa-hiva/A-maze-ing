@@ -1,7 +1,27 @@
 from mazegen import Maze, Cell
 import time
 
-__all__ = ["time"]
+
+def clear_screen() -> None:
+    print("\033[2J\033[H", end="")
+
+
+def get_path_symbol(maze: Maze, row: int, col: int,
+                    path: list[Cell]) -> str:
+    cell: Cell = maze.matrix[row][col]
+    i: int = path.index(cell)
+    next: Cell = path[i + 1]
+    row_diff = next.row - cell.row
+    col_diff = next.col - cell.col
+    if row_diff == -1:
+        return " ↑ "
+    elif row_diff == 1:
+        return " ↓ "
+    elif col_diff == -1:
+        return " ← "
+    elif col_diff == 1:
+        return " → "
+    return " * "
 
 
 def cell_label(
@@ -13,7 +33,8 @@ def cell_label(
         return " 0 "
     elif (maze.matrix[row][col] in path):
         if solved is True:
-            return " · "
+            # return get_path_symbol(maze, row, col, path)
+            return " • "
         return "   "
     elif (maze.matrix[row][col].is_pattern):
         return "███"
@@ -185,3 +206,35 @@ def show_maze(maze: Maze, path: list[Cell], solved: bool) -> None:
     print()
     print(build_ascii_maze(maze, path, solved))
     print()
+
+
+def animate_generation(
+    frames: list[Maze],
+    path: list[Cell],
+    solved: bool,
+) -> None:
+
+    print("\033[2J", end="")  # 2J = Delete screen
+    print("\033[?25l", end="")  # ?25 = Cursor, l = hide
+
+    try:
+        for maze in frames:
+            print("\033[H", end="")  # H = Home (go to 0,0)
+            show_maze(maze, path, solved)
+            time.sleep(0.02)
+    finally:
+        print("\033[?25h", end="")  # ?25 = Cursor, h = show
+
+
+def animate_path(maze: Maze, path: list[Cell], solved: bool) -> None:
+    path_frames: list[list[Cell]] = [path[:i+1] for i in range(len(path))]
+    print("\033[2J", end="")  # 2J = Delete screen
+    print("\033[?25l", end="")  # ?25 = Cursor, l = hide
+
+    try:
+        for path_frame in path_frames:
+            print("\033[H", end="")  # H = Home (go to 0,0)
+            show_maze(maze, path_frame, solved)
+            time.sleep(0.05)
+    finally:
+        print("\033[?25h", end="")  # ?25 = Cursor, h = show

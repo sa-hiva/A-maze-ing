@@ -12,8 +12,9 @@ class MazeGenerator():
                  entry: tuple[int, int],
                  exit: tuple[int, int],
                  perfect: bool
-                 ) -> None:
+                 ) -> tuple[Maze, list[Maze]]:
         maze: Maze = Maze(width, height, entry, exit, perfect)
+        frames: list[Maze] = []
         add_pattern(maze)
         row = self.rng.randrange(height)
         col = self.rng.randrange(width)
@@ -22,9 +23,9 @@ class MazeGenerator():
             row = self.rng.randrange(height)
             col = self.rng.randrange(width)
             first = maze.matrix[row][col]
-        visit(maze, first, None, self.rng)
+        visit(maze, first, None, self.rng, frames)
         maze.clear_visited()
-        return maze
+        return maze, frames
 
 
 def add_pattern(maze: Maze) -> None:
@@ -46,14 +47,20 @@ def add_pattern(maze: Maze) -> None:
                 cell.visited = True
 
 
-def visit(maze: Maze, current: Cell, previous: Cell, rng: Random) -> None:
+def visit(maze: Maze,
+          current: Cell,
+          previous: Cell | None,
+          rng: Random,
+          frames: list[Maze]
+          ) -> None:
     if current.visited:
         return
     current.visited = True
     current.previous = previous
     if previous is not None:
         maze.remove_walls(current, previous)
+        frames.append(maze.clone())
     neighbors = maze.get_unvisited_neighbors(current)
     rng.shuffle(neighbors)
     for neighbor in neighbors:
-        visit(maze, neighbor, current, rng)
+        visit(maze, neighbor, current, rng, frames)

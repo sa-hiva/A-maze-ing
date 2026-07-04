@@ -43,16 +43,16 @@ def parse_config(file_path: str) -> dict[str, str]:
     return content
 
 
-def save_maze_output(file_path: str, maze: Maze) -> None:
+def save_maze_output(file_path: str, maze: Maze, solution: str) -> None:
     try:
         with open(file_path, "w") as file:
-            file.write(maze.get_maze_as_str())
+            file.write(maze.to_hex_str())
             file.write("\n")
             file.write(f"{maze.entry[0]},{maze.entry[1]}")
             file.write("\n")
             file.write(f"{maze.exit[0]},{maze.exit[1]}")
             file.write("\n")
-            file.write(maze.solution)
+            file.write(solution)
             file.write("\n")
 
     except PermissionError as error:
