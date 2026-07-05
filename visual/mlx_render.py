@@ -238,3 +238,11 @@ def animate_path(maze: Maze, path: list[Cell], solved: bool) -> None:
             time.sleep(0.05)
     finally:
         print("\033[?25h", end="")  # ?25 = Cursor, h = show
+
+def enter_fullscreen() -> None:
+    print("\033[?1049h", end="", flush=True)  # activa alt screen buffer
+    print("\033[?25l", end="", flush=True)    # oculta cursor
+
+def exit_fullscreen() -> None:
+    print("\033[?25h", end="", flush=True)    # muestra cursor
+    print("\033[?1049l", end="", flush=True)  # restaura pantalla original
