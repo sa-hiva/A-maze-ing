@@ -3,9 +3,13 @@ from .cell import Cell
 from .maze import Maze
 
 
-class MazeGenerator():
+class MazeGenerator:
     def __init__(self, seed: int | None = None) -> None:
-        self.rng: Random = Random(seed) if seed else Random()
+        self.seed = seed
+        self.rng: Random = Random(seed) if seed is not None else Random()
+
+    def reset(self) -> None:
+        self.rng = Random(self.seed) if self.seed is not None else Random()
 
     def generate(self, width: int,
                  height: int,

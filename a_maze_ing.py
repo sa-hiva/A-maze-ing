@@ -51,7 +51,7 @@ def run(stdscr, config_path: str) -> None:
         perfect,
     ) = validate(content)
 
-    generator = MazeGenerator()
+    generator = MazeGenerator(30)
     maze, frames = generator.generate(width, height, entry_coords,
                                       exit_coords, perfect)
     path = solve_maze(maze)
@@ -87,6 +87,7 @@ def run(stdscr, config_path: str) -> None:
         elif key == ord("1"):
             solved = False
             offset_row, offset_col = 0, 0
+            generator.reset()
             maze, frames = generator.generate(width, height, entry_coords,
                                               exit_coords, perfect)
             if animate_gen:
