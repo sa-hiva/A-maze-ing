@@ -1,7 +1,5 @@
-from .mlx_render import show_maze, animate_generation
-from .mlx_render import clear_screen, animate_path
-from .mlx_render import enter_fullscreen, exit_fullscreen
+from .interface_renderer import draw_interface, animate_path_curses
+from .interface_renderer import animate_generation_curses
 
-__all__ = ["show_maze", "animate_generation",
-           "animate_path", "clear_screen",
-           "enter_fullscreen", "exit_fullscreen"]
+__all__ = ["draw_interface", "animate_path_curses",
+           "animate_generation_curses"]
