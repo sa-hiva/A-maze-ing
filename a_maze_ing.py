@@ -51,7 +51,7 @@ def run(stdscr, config_path: str) -> None:
         perfect,
     ) = validate(content)
 
-    generator = MazeGenerator(30)
+    generator = MazeGenerator()
     maze, frames = generator.generate(width, height, entry_coords,
                                       exit_coords, perfect)
     path = solve_maze(maze)
