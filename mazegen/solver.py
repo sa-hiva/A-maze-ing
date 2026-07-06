@@ -52,3 +52,4 @@ def get_movement(old: Cell, new: Cell) -> str:
         return "W"
     elif col_diff == 1:
         return "E"
+    return ""
