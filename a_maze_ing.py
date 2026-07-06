@@ -1,10 +1,12 @@
 import sys
 import curses
+import time
 from mazegen import MazeGenerator
 from mazegen import solve_maze, get_directions_from_path
 from utils import parse_config, validate, save_maze_output
 from visual import draw_interface, animate_generation_curses
 from visual import animate_path_curses
+from utils.io import boom
 
 __all__ = ["save_maze_output"]
 
@@ -71,7 +73,13 @@ def run(stdscr, config_path: str) -> None:
             stdscr, maze, path, solved, menu_lines,
             offset_row, offset_col
         )
-        key = stdscr.getch()  # Detects pressed key!
+
+        try:
+            key = stdscr.getch()  # Detects pressed key!
+        except (EOFError, KeyboardInterrupt):
+            print("[ERROR, INVALID KEY]")
+            boom()
+            sys.exit(1)
 
         if key == curses.KEY_UP:
             offset_row = max(0, offset_row - 1)
@@ -109,6 +117,12 @@ def run(stdscr, config_path: str) -> None:
             animate_sol = not animate_sol
 
         elif key == ord("6"):
+            print("Bye!")
+            time.sleep(1)
+            break
+        else:
+            print("Invalid option")
+            boom()
             break
 
 
