@@ -69,7 +69,7 @@ def run(stdscr, config_path: str) -> None:
 
     while True:
         menu_lines = build_menu_lines(animate_gen, animate_sol)
-        max_offset_row, max_offset_col = draw_interface(
+        max_scroll_row, max_scroll_col = draw_interface(
             stdscr, maze, path, solved, menu_lines,
             offset_row, offset_col
         )
@@ -84,11 +84,11 @@ def run(stdscr, config_path: str) -> None:
         if key == curses.KEY_UP:
             offset_row = max(0, offset_row - 1)
         elif key == curses.KEY_DOWN:
-            offset_row = min(max_offset_row, offset_row + 1)
+            offset_row = min(max_scroll_row, offset_row + 1)
         elif key == curses.KEY_LEFT:
             offset_col = max(0, offset_col - 1)
         elif key == curses.KEY_RIGHT:
-            offset_col = min(max_offset_col, offset_col + 1)
+            offset_col = min(max_scroll_col, offset_col + 1)
         elif key == curses.KEY_RESIZE:
             pass  # resize is managed by draw_interface
 

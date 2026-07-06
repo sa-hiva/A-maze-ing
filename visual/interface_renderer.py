@@ -36,25 +36,31 @@ def draw_interface(stdscr, maze: Maze, path: list[Cell], solved: bool,
     cropped according to offset_row/offset_col. Returns the maximum
     valid offsets, so the caller can clamp scrolling to the content size."""
 
+    # Supose that stdr is the camera. max_y and max_x represent the maximum
+    # of the screen (terminal window). Offsets represent the starting point
+    # on each axis in relation to the viewport (in order to be able to scroll)
+
     stdscr.erase()  # Clean screen
-    max_y, max_x = stdscr.getmaxyx()  # Get max screen size
+    max_y, max_x = stdscr.getmaxyx()  # Get max screen size 
 
     all_lines = build_all_lines(maze, path, solved, menu_lines)
-    visible_width = max(0, max_x - 1)
+    visible_width = max(0, max_x - 1) 
 
     for i in range(max_y):
-        src_row = offset_row + i
+        src_row = offset_row + i  # We offset to start painting from scroll
         if src_row >= len(all_lines):
             break
-        line = all_lines[src_row][offset_col:offset_col + visible_width]
-        safe_addstr(stdscr, i, 0, line)
+        full_line = all_lines[src_row]
+        end_col = offset_col + visible_width
+        visible_line = full_line[offset_col:end_col] # Only print from offset col
+        safe_addstr(stdscr, i, 0, visible_line)
 
-    stdscr.refresh()
+    stdscr.refresh() # This is when we print! 
 
-    max_offset_row = max(0, len(all_lines) - max_y)
+    max_scroll_row = max(0, len(all_lines) - max_y) # Max row that can be on top
     max_line_width = max((len(line) for line in all_lines), default=0)
-    max_offset_col = max(0, max_line_width - visible_width)
-    return max_offset_row, max_offset_col
+    max_scroll_col = max(0, max_line_width - visible_width)
+    return max_scroll_row, max_scroll_col
 
 
 def animate_generation_curses(stdscr, frames: list[Maze],
