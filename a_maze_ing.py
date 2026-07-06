@@ -121,9 +121,10 @@ def run(stdscr, config_path: str) -> None:
             time.sleep(1)
             break
         else:
-            print("Invalid option")
-            boom()
-            break
+            status_message = "Invalid option"
+            # stdscr.refresh()
+            # boom()
+            # break
 
 
 def main() -> None:

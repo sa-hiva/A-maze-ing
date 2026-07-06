@@ -37,7 +37,7 @@ def add_pattern(maze: Maze) -> None:
         print("Maze size too small: 42 pattern will be ommited")
         return
     row: int = maze.height // 2 + maze.height % 2 - 3
-    col: int = maze.width // 2 + maze.height % 2 - 4
+    col: int = maze.width // 2 - 4
     pattern = ("  # ###",
                " #    #",
                "###  # ",
