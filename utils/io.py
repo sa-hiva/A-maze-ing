@@ -1,4 +1,5 @@
 from mazegen import Maze
+import time
 
 
 def parse_config(file_path: str) -> dict[str, str]:
@@ -59,3 +60,15 @@ def save_maze_output(file_path: str, maze: Maze, solution: str) -> None:
         raise PermissionError(
             f"Error: Permission denied writing output file "
             f"'{file_path}'") from error
+
+
+def boom() -> None:
+    time.sleep(1)
+    print("Self-destruct in 3...")
+    time.sleep(1)
+    print("2...")
+    time.sleep(1)
+    print("1...")
+    time.sleep(1)
+    print("BOOM!\n")
+    time.sleep(1)
