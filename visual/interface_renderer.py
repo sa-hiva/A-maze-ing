@@ -3,6 +3,32 @@ from mazegen import Maze, Cell
 from .maze_renderer import build_ascii_maze
 
 
+BYE_MESSAGE = [
+    "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⡞⠋⠉⠳⡄⠀⠀⠀⠀⢠⠴⠒⠳⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀                                 ",
+    "⠀⠀⢀⡶⢶⡀⠀⠀⠀⠀⠀⠀⠀⢠⠏⠀⠀⠀⠀⢹⡄⠀⠀⣰⠋⠀⠀⠀⠸⣆⠀⠀⠀⠀⠀⠀⠀⠀                                ",
+    "⠀⣀⡼⠀⠀⠛⠒⠒⡦⠀⠀⠀⠀⡟⠀⠀⠀⠀⠀⠀⣷⠀⢰⡏⠀⠀⠀⠀⠀⣹⠀⠀⠀⠀⠀⠀⠀⠀                                ",
+    "⣏⠁⠀⠀⠀⠀⠀⣼⠁⠀⠀⠀⠀⡇⠀⠀⠀⠀⠀⠀⣹⠀⢸⠀⠀⠀⠀⠀⠀⢸⠁⠀⠀⠀⠀⠀⠀⠀                                 ",
+    "⠀⠉⡶⠀⠀⠀⠀⠈⡆⠀⠀⠀⠀⡇⠀⠀⠀⠀⠀⠀⢽⠀⢸⠀⠀⠀⠀⠀⠀⣽⠀⠀⠀⠀⠀⠀                                    ",
+    "⠀⠀⢷⡤⠞⠉⠉⠉⠁⠀⠀⠀⠀⣿⠀⠀⠀⠀⠀⠀⢸⡆⢸⠀⠀⠀⠀⠀⢀⡏⠀⠀⠀⠀                                     ",
+    "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠸⣆⠀⠀⠀⠀⠀⠈⠛⠋⠀⠀⠀⠀⠀⣸⠃⠀⠀⠀⠀⠀⠀⠀⠀                                  ",
+    "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⡤⠆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠐⠳⣇⠀⠀⠀⠀⠀⠀⠀⠀⠀                                  ",
+    "           ⢠⡞⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠷⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⡠⠤⠤⠤⠤⣄⣀⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ ",
+    "⠀⠀⠀⠀⠀⠀⠀⠀⠀⣰⠏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⣦⠀⠀⠀⠀⠀⠀⢀⠴⠋⢡⣦⣤⣀⠀⠀⠀⠀⠈⠉⠻⢵⡲⠤⣀⠀⠀⠀⠀⠀⠀⠀⠀ ",
+    "⠀⠀⠀⠀⠀⠀⠀⠀⠀⡟⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠰⡇⠀⠀⠀⠀⣰⠃⠀⠀⣾⣿⠛⠻⣿⡆⠀⠀⠀⠀⠀⠀⠀⠈⠻⣝⣢⣄⠀⠀⠀⡀⠀ ",
+    "⠀⠀⠀⠀⠀⠀⠀⠀⠀⣧⣠⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢰⡇⠀⠀⠀⠀⡇⠀⠀⣸⣿⣷⣶⣶⠿⠃⣤⡀⠀⠀⠀⠀⠀⠀⠀⠈⡟⣎⣳⣴⠊⠁⠀",
+    "⠀⠀⠀⠀⠀⠀⠀⣀⣤⣾⠁⠈⣧⠀⠰⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣄⠀⠀⠀⠀⣿⠀⠀⠀⠀⠀⢧⠀⢠⣿⡏⠀⠈⣿⡦⠀⣿⡇⢀⣼⣶⢄⣀⣀⡀⠀⣻⣯⣧⡌⢣ ",
+    "⠀⠀⠀⠀⠀⠀⠐⡇⠀⠘⠁⠀⠘⠲⢤⡀⠀⠀⠀⢀⠀⠀⠀⠀⠀⠈⠉⠀⠀⠀⢠⠇⠀⠀⠀⠀⠈⢦⠘⠻⠿⣶⣾⡿⠃⠀⣿⣥⣾⠟⢡⣾⡟⠛⢿⣧⢧⣿⣿⣷⠀⢳",
+    "⠀⠀⠀⠀⠀⠀⠀⠙⢦⣄⠀⣠⠤⠤⠄⠙⡇⠀⠀⢨⠷⢶⡋⠀⠀⠀⠀⠀⢀⣴⠋⠀⠀⠀⠀⠀⠀⠀⠳⣄⠀⠀⠀⠀⠀⣠⣿⡿⠃⠀⣾⣿⠛⠻⣿⡿⢰⣿⣯⠎⡟⢸ ",
+    "⠀⠀⠀⠀⠀⠀⠀⠀⠀⣧⠀⢷⣀⡴⠂⢠⣇⡀⠀⠀⠀⠀⠀⠀⠀⣀⣀⣴⠟⠁⠀⠀⠀⠀⠀⠀⠀ ⠀⠈⠑⢦⣀⠀⠼⠿⠋⠀⠀⠀⠈⠻⢷⣶⡎⢠⣬⣝⡿⢴⢃⡾  ",
+    "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠳⠤⣤⣤⡴⠋⠀⠹⣽⣛⣛⣿⠋⠉⠉⢁⡴⢋⣳⠀⠀⠀⠀⠀   ⠀⠀⠀⠀⠈⢑⡶⠀⠀⠀⠀⠀⠀⠀⠠⡐⠀⠘⠛⠓⣚⡶⠟⠀⠀  ",
+    "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠳⣄⡀⠀⠀⠉⠁⠀⠀⠀⣠⡞⠓⠚⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡴⠋⠀⠀⣄⣠⡴⠞⠒⠢⡤⠂⠑⠒⠚⠋⠉⠀⠀⠀    ",
+    "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠹⡍⠓⠦⢤⠤⠴⠶⣺⠟⠀⠀⠀⠀⠀⠀⢀⣀⡰⢲⠀⠀⠀ ⠑⠒⠊⠉⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀              ",
+    "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠓⠒⠛⠲⠶⠚⠁⠀⠀⠀⠀⠀⠀⠀⣏⠉⠁⠈⠲⣤                                 ",
+    "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡞⣁⡀⠀⡞⠁                                  ",
+    "⠀⠀ ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠁⠈⠙⠁⠀                                   "
+]
+
+
 def safe_addstr(stdscr, row: int, col: int, text: str) -> None:
     """Method to ignore the error thrown by curses when
     writing on the last cell of the screen, since in
@@ -30,7 +56,7 @@ def build_all_lines(maze: Maze, path: list[Cell], solved: bool,
 
 def draw_interface(stdscr, maze: Maze, path: list[Cell], solved: bool,
                    menu_lines: list[str],
-                   offset_row: int = 0, offset_col: int = 0
+                   offset_row: int = 0, offset_col: int = 0,
                    ) -> tuple[int, int]:
     """Draws the maze (and optionally a menu below it) inside stdscr,
     cropped according to offset_row/offset_col. Returns the maximum
@@ -41,10 +67,10 @@ def draw_interface(stdscr, maze: Maze, path: list[Cell], solved: bool,
     # on each axis in relation to the viewport (in order to be able to scroll)
 
     stdscr.erase()  # Clean screen
-    max_y, max_x = stdscr.getmaxyx()  # Get max screen size 
+    max_y, max_x = stdscr.getmaxyx()  # Get max screen size
 
     all_lines = build_all_lines(maze, path, solved, menu_lines)
-    visible_width = max(0, max_x - 1) 
+    visible_width = max(0, max_x - 1)
 
     for i in range(max_y):
         src_row = offset_row + i  # We offset to start painting from scroll
@@ -52,12 +78,12 @@ def draw_interface(stdscr, maze: Maze, path: list[Cell], solved: bool,
             break
         full_line = all_lines[src_row]
         end_col = offset_col + visible_width
-        visible_line = full_line[offset_col:end_col] # Only print from offset col
+        visible_line = full_line[offset_col:end_col]  # Print from offset col
         safe_addstr(stdscr, i, 0, visible_line)
 
-    stdscr.refresh() # This is when we print! 
+    stdscr.refresh()  # This is when we print!
 
-    max_scroll_row = max(0, len(all_lines) - max_y) # Max row that can be on top
+    max_scroll_row = max(0, len(all_lines) - max_y)  # Max row possible on top
     max_line_width = max((len(line) for line in all_lines), default=0)
     max_scroll_col = max(0, max_line_width - visible_width)
     return max_scroll_row, max_scroll_col
@@ -65,14 +91,39 @@ def draw_interface(stdscr, maze: Maze, path: list[Cell], solved: bool,
 
 def animate_generation_curses(stdscr, frames: list[Maze],
                               path: list[Cell], solved: bool) -> None:
+    stdscr.nodelay(True)
+
     for maze in frames:
         draw_interface(stdscr, maze, path, solved, menu_lines=[])
-        curses.napms(20)
+        curses.napms(10)
+    stdscr.nodelay(False)
+    stdscr.getch()
 
 
 def animate_path_curses(stdscr, maze: Maze, path: list[Cell],
                         solved: bool) -> None:
+    stdscr.nodelay(True)
     for i in range(len(path)):
         partial_path = path[:i + 1]
         draw_interface(stdscr, maze, partial_path, solved, menu_lines=[])
         curses.napms(50)
+    stdscr.nodelay(False)
+    stdscr.getch()
+
+
+def print_bye_message(stdscr, offset_row: int = 0,
+                      offset_col: int = 0) -> None:
+    stdscr.erase()  # Clean screen
+    max_y, max_x = stdscr.getmaxyx()  # Max screen size
+    visible_width = max(0, max_x - 1)
+
+    for i in range(max_y):
+        src_row = offset_row + i  # We offset to start painting from scroll
+        if src_row >= len(BYE_MESSAGE):
+            break
+        full_line = BYE_MESSAGE[src_row]
+        end_col = offset_col + visible_width
+        visible_line = full_line[offset_col:end_col]  # Print from offset col
+        safe_addstr(stdscr, i, 0, visible_line)
+
+    stdscr.refresh()  # This is when we print!

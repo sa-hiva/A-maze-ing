@@ -28,6 +28,8 @@ class MazeGenerator:
             col = self.rng.randrange(width)
             first = maze.matrix[row][col]
         visit(maze, first, None, self.rng, frames)
+        if not perfect:
+            pacmanify(maze, frames, self.rng)
         maze.clear_visited()
         return maze, frames
 
@@ -37,7 +39,7 @@ def add_pattern(maze: Maze) -> None:
         print("Maze size too small: 42 pattern will be ommited")
         return
     row: int = maze.height // 2 + maze.height % 2 - 3
-    col: int = maze.width // 2 - 4
+    col: int = maze.width // 2 - 3
     pattern = ("  # ###",
                " #    #",
                "###  # ",
@@ -68,3 +70,38 @@ def visit(maze: Maze,
     rng.shuffle(neighbors)
     for neighbor in neighbors:
         visit(maze, neighbor, current, rng, frames)
+
+
+def pacmanify(maze: Maze, frames: list[Maze], rng: Random) -> None:
+    """Convert a perfect maze into a Pac-Man-like maze by opening
+    additional random connections.
+    """
+    dead_ends = get_dead_ends(maze)
+
+    for cell in dead_ends:
+        neighbors = maze.get_closed_neighbors(cell)
+
+        if neighbors:
+            neighbor = rng.choice(neighbors)
+            maze.remove_walls(cell, neighbor)
+            frames.append(maze.clone())
+
+
+def get_dead_ends(maze: Maze) -> list[Cell]:
+    dead_ends = []
+
+    for row in maze.matrix:
+        for cell in row:
+            if cell.is_pattern:
+                continue
+
+            exits = 0
+
+            for direction in "NESW":
+                if cell.is_wall_open(direction):
+                    exits += 1
+
+            if exits == 1:
+                dead_ends.append(cell)
+
+    return dead_ends

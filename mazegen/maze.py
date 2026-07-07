@@ -130,6 +130,25 @@ class Maze:
                 valid_neighbors.append(neighbor)
         return valid_neighbors
 
+    def get_closed_neighbors(self, cell: Cell) -> list[Cell]:
+        neighbors: list[Cell] = []
+        row = cell.row
+        col = cell.col
+        possibles: list[Cell] = []
+        if row > 0:
+            possibles.append(self.matrix[row - 1][col])
+        if row < self.height - 1:
+            possibles.append(self.matrix[row + 1][col])
+        if col > 0:
+            possibles.append(self.matrix[row][col - 1])
+        if col < self.width - 1:
+            possibles.append(self.matrix[row][col + 1])
+        for neighbor in possibles:
+            if (not self.is_way_open(cell, neighbor)
+               and not neighbor.is_pattern):
+                neighbors.append(neighbor)
+        return neighbors
+
     def clone(self) -> "Maze":
         from .generator import add_pattern
         maze: "Maze" = Maze.from_hex_str(
