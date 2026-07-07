@@ -123,7 +123,7 @@ def run(stdscr, config_path: str) -> None:
 
         elif key == ord("6"):
             print("Bye!")
-            time.sleep(1)
+            time.sleep(0.5)
             break
         else:
             print("Invalid option")
