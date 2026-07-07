@@ -5,7 +5,8 @@ from mazegen import MazeGenerator
 from mazegen import solve_maze, get_directions_from_path
 from utils import parse_config, validate, save_maze_output
 from visual import draw_interface, animate_generation_curses
-from visual import animate_path_curses, print_bye_message
+from visual import animate_path_curses, print_bye_message, init_colors
+from visual import next_wall_color_index
 from utils.io import boom
 from visual import animate_invalid_key_spam
 
@@ -18,7 +19,7 @@ MENU_TEMPLATE = [
     "",
     "1. New maze",
     "2. Show/Hide path",
-    "3. Some other shit I'm forgetting",
+    "3. Change wall color",
     "4. Enable/Disable generator animations",
     "5. Enable/Disable path animations",
     "6. Exit",
@@ -48,6 +49,7 @@ def run(stdscr, config_path: str) -> None:
     stdscr.keypad(True)    # activates detection of keypad
     curses.start_color()
     curses.use_default_colors()
+    init_colors()
 
     content = parse_config(config_path)
     (
@@ -71,16 +73,17 @@ def run(stdscr, config_path: str) -> None:
     animate_gen = False
     animate_sol = False
     offset_row, offset_col = 0, 0
+    wall_color_index = 0
 
     if animate_gen:
-        animate_generation_curses(stdscr, frames, path, solved)
+        animate_generation_curses(stdscr, frames, path,
+                                  solved, wall_color_index)
 
     while True:
         menu_lines = build_menu_lines(animate_gen, animate_sol, status_message)
         max_scroll_row, max_scroll_col = draw_interface(
             stdscr, maze, path, solved, menu_lines,
-            offset_row, offset_col
-        )
+            wall_color_index, offset_row, offset_col)
 
         try:
             key = stdscr.getch()  # Detects pressed key!
@@ -108,18 +111,20 @@ def run(stdscr, config_path: str) -> None:
             maze, frames = generator.generate(width, height, entry_coords,
                                               exit_coords, perfect)
             if animate_gen:
-                animate_generation_curses(stdscr, frames, path, solved)
+                animate_generation_curses(stdscr, frames, path,
+                                          solved, wall_color_index)
             path = solve_maze(maze)
             status_message = "Maze Generated!"
 
         elif key == ord("2"):
             solved = not solved
             if animate_sol and solved:
-                animate_path_curses(stdscr, maze, path, solved)
+                animate_path_curses(stdscr, maze, path,
+                                    solved, wall_color_index)
             status_message = ""
 
         elif key == ord("3"):
-            pass
+            wall_color_index = next_wall_color_index(wall_color_index)
 
         elif key == ord("4"):
             animate_gen = not animate_gen

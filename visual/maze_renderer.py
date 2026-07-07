@@ -32,7 +32,7 @@ def cell_label(
             return " • "
         return "   "
     elif (maze.matrix[row][col].is_pattern):
-        return "███"
+        return "▒▒▒"
     return "   "
 
 
