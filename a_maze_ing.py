@@ -5,14 +5,17 @@ from mazegen import MazeGenerator
 from mazegen import solve_maze, get_directions_from_path
 from utils import parse_config, validate, save_maze_output
 from visual import draw_interface, animate_generation_curses
-from visual import animate_path_curses, init_colors
+from visual import animate_path_curses, print_bye_message, init_colors
 from visual import next_wall_color_index
 from utils.io import boom
+from visual import animate_invalid_key_spam
 
 __all__ = ["save_maze_output"]
 
 MENU_TEMPLATE = [
-    "=== MENU ===",
+    "====================",
+    "        MENU        ",
+    "====================",
     "",
     "1. New maze",
     "2. Show/Hide path",
@@ -20,10 +23,12 @@ MENU_TEMPLATE = [
     "4. Enable/Disable generator animations",
     "5. Enable/Disable path animations",
     "6. Exit",
+    "",
 ]
 
 
-def build_menu_lines(animate_gen: bool, animate_sol: bool) -> list[str]:
+def build_menu_lines(animate_gen: bool, animate_sol: bool,
+                     status_message: str) -> list[str]:
     menu_lines = []
     for line in MENU_TEMPLATE:
         if line.startswith("4."):
@@ -33,13 +38,14 @@ def build_menu_lines(animate_gen: bool, animate_sol: bool) -> list[str]:
             line = (f"5. Enable/Disable path animations "
                     f"Current: {'On' if animate_sol else 'Off'})")
         menu_lines.append(line)
-    menu_lines.append("")
     menu_lines.append("Select an option: ")
+    if status_message:
+        menu_lines[-1] += status_message
     return menu_lines
 
 
 def run(stdscr, config_path: str) -> None:
-    curses.curs_set(0)     # Hides cursos
+    curses.curs_set(0)     # Hides curses
     stdscr.keypad(True)    # activates detection of keypad
     curses.start_color()
     curses.use_default_colors()
@@ -55,6 +61,8 @@ def run(stdscr, config_path: str) -> None:
         perfect,
     ) = validate(content)
 
+    invalid_key_count = 0
+    status_message = ""
     generator = MazeGenerator()
     maze, frames = generator.generate(width, height, entry_coords,
                                       exit_coords, perfect)
@@ -72,7 +80,7 @@ def run(stdscr, config_path: str) -> None:
                                   solved, wall_color_index)
 
     while True:
-        menu_lines = build_menu_lines(animate_gen, animate_sol)
+        menu_lines = build_menu_lines(animate_gen, animate_sol, status_message)
         max_scroll_row, max_scroll_col = draw_interface(
             stdscr, maze, path, solved, menu_lines,
             wall_color_index, offset_row, offset_col)
@@ -80,7 +88,8 @@ def run(stdscr, config_path: str) -> None:
         try:
             key = stdscr.getch()  # Detects pressed key!
         except (EOFError, KeyboardInterrupt):
-            print("[ERROR, INVALID KEY]")
+            stdscr.addstr("[ERROR, INVALID KEY]")
+            stdscr.refresh()
             boom()
             sys.exit(1)
 
@@ -105,30 +114,36 @@ def run(stdscr, config_path: str) -> None:
                 animate_generation_curses(stdscr, frames, path,
                                           solved, wall_color_index)
             path = solve_maze(maze)
+            status_message = "Maze Generated!"
 
         elif key == ord("2"):
             solved = not solved
             if animate_sol and solved:
                 animate_path_curses(stdscr, maze, path,
                                     solved, wall_color_index)
+            status_message = ""
 
         elif key == ord("3"):
             wall_color_index = next_wall_color_index(wall_color_index)
 
         elif key == ord("4"):
             animate_gen = not animate_gen
+            status_message = ""
 
         elif key == ord("5"):
             animate_sol = not animate_sol
+            status_message = ""
 
         elif key == ord("6"):
-            print("Bye!")
-            time.sleep(0.5)
+            print_bye_message(stdscr, offset_row, offset_col)
+            time.sleep(1)
             break
         else:
-            print("Invalid option")
-            boom()
-            break
+            status_message = "Invalid option"
+            invalid_key_count += 1
+            if invalid_key_count > 0 and invalid_key_count % 3 == 0:
+                animate_invalid_key_spam(stdscr,)
+                status_message = ""
 
 
 def main() -> None:

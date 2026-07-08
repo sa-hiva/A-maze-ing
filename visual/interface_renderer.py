@@ -4,6 +4,32 @@ from .maze_renderer import build_ascii_maze
 from .colors import get_wall_color_pair, is_wall_char
 
 
+BYE_MESSAGE = [
+    "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⡞⠋⠉⠳⡄⠀⠀⠀⠀⢠⠴⠒⠳⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀                                 ",
+    "⠀⠀⢀⡶⢶⡀⠀⠀⠀⠀⠀⠀⠀⢠⠏⠀⠀⠀⠀⢹⡄⠀⠀⣰⠋⠀⠀⠀⠸⣆⠀⠀⠀⠀⠀⠀⠀⠀                                ",
+    "⠀⣀⡼⠀⠀⠛⠒⠒⡦⠀⠀⠀⠀⡟⠀⠀⠀⠀⠀⠀⣷⠀⢰⡏⠀⠀⠀⠀⠀⣹⠀⠀⠀⠀⠀⠀⠀⠀                                ",
+    "⣏⠁⠀⠀⠀⠀⠀⣼⠁⠀⠀⠀⠀⡇⠀⠀⠀⠀⠀⠀⣹⠀⢸⠀⠀⠀⠀⠀⠀⢸⠁⠀⠀⠀⠀⠀⠀⠀                                 ",
+    "⠀⠉⡶⠀⠀⠀⠀⠈⡆⠀⠀⠀⠀⡇⠀⠀⠀⠀⠀⠀⢽⠀⢸⠀⠀⠀⠀⠀⠀⣽⠀⠀⠀⠀⠀⠀                                    ",
+    "⠀⠀⢷⡤⠞⠉⠉⠉⠁⠀⠀⠀⠀⣿⠀⠀⠀⠀⠀⠀⢸⡆⢸⠀⠀⠀⠀⠀⢀⡏⠀⠀⠀⠀                                     ",
+    "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠸⣆⠀⠀⠀⠀⠀⠈⠛⠋⠀⠀⠀⠀⠀⣸⠃⠀⠀⠀⠀⠀⠀⠀⠀                                  ",
+    "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⡤⠆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠐⠳⣇⠀⠀⠀⠀⠀⠀⠀⠀⠀                                  ",
+    "           ⢠⡞⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠷⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⡠⠤⠤⠤⠤⣄⣀⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ ",
+    "⠀⠀⠀⠀⠀⠀⠀⠀⠀⣰⠏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⣦⠀⠀⠀⠀⠀⠀⢀⠴⠋⢡⣦⣤⣀⠀⠀⠀⠀⠈⠉⠻⢵⡲⠤⣀⠀⠀⠀⠀⠀⠀⠀⠀ ",
+    "⠀⠀⠀⠀⠀⠀⠀⠀⠀⡟⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠰⡇⠀⠀⠀⠀⣰⠃⠀⠀⣾⣿⠛⠻⣿⡆⠀⠀⠀⠀⠀⠀⠀⠈⠻⣝⣢⣄⠀⠀⠀⡀⠀ ",
+    "⠀⠀⠀⠀⠀⠀⠀⠀⠀⣧⣠⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢰⡇⠀⠀⠀⠀⡇⠀⠀⣸⣿⣷⣶⣶⠿⠃⣤⡀⠀⠀⠀⠀⠀⠀⠀⠈⡟⣎⣳⣴⠊⠁⠀",
+    "⠀⠀⠀⠀⠀⠀⠀⣀⣤⣾⠁⠈⣧⠀⠰⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣄⠀⠀⠀⠀⣿⠀⠀⠀⠀⠀⢧⠀⢠⣿⡏⠀⠈⣿⡦⠀⣿⡇⢀⣼⣶⢄⣀⣀⡀⠀⣻⣯⣧⡌⢣ ",
+    "⠀⠀⠀⠀⠀⠀⠐⡇⠀⠘⠁⠀⠘⠲⢤⡀⠀⠀⠀⢀⠀⠀⠀⠀⠀⠈⠉⠀⠀⠀⢠⠇⠀⠀⠀⠀⠈⢦⠘⠻⠿⣶⣾⡿⠃⠀⣿⣥⣾⠟⢡⣾⡟⠛⢿⣧⢧⣿⣿⣷⠀⢳",
+    "⠀⠀⠀⠀⠀⠀⠀⠙⢦⣄⠀⣠⠤⠤⠄⠙⡇⠀⠀⢨⠷⢶⡋⠀⠀⠀⠀⠀⢀⣴⠋⠀⠀⠀⠀⠀⠀⠀⠳⣄⠀⠀⠀⠀⠀⣠⣿⡿⠃⠀⣾⣿⠛⠻⣿⡿⢰⣿⣯⠎⡟⢸ ",
+    "⠀⠀⠀⠀⠀⠀⠀⠀⠀⣧⠀⢷⣀⡴⠂⢠⣇⡀⠀⠀⠀⠀⠀⠀⠀⣀⣀⣴⠟⠁⠀⠀⠀⠀⠀⠀⠀ ⠀⠈⠑⢦⣀⠀⠼⠿⠋⠀⠀⠀⠈⠻⢷⣶⡎⢠⣬⣝⡿⢴⢃⡾  ",
+    "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠳⠤⣤⣤⡴⠋⠀⠹⣽⣛⣛⣿⠋⠉⠉⢁⡴⢋⣳⠀⠀⠀⠀⠀   ⠀⠀⠀⠀⠈⢑⡶⠀⠀⠀⠀⠀⠀⠀⠠⡐⠀⠘⠛⠓⣚⡶⠟⠀⠀  ",
+    "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠳⣄⡀⠀⠀⠉⠁⠀⠀⠀⣠⡞⠓⠚⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡴⠋⠀⠀⣄⣠⡴⠞⠒⠢⡤⠂⠑⠒⠚⠋⠉⠀⠀⠀    ",
+    "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠹⡍⠓⠦⢤⠤⠴⠶⣺⠟⠀⠀⠀⠀⠀⠀⢀⣀⡰⢲⠀⠀⠀ ⠑⠒⠊⠉⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀              ",
+    "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠓⠒⠛⠲⠶⠚⠁⠀⠀⠀⠀⠀⠀⠀⣏⠉⠁⠈⠲⣤                                 ",
+    "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡞⣁⡀⠀⡞⠁                                  ",
+    "⠀⠀ ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠁⠈⠙⠁⠀                                   "
+]
+
+
 def safe_addstr(
     stdscr,
     row: int,
@@ -98,6 +124,7 @@ def animate_generation_curses(
     wall_color_index: int
 ) -> None:
     """Animate maze generation inside curses."""
+    # stdscr.nodelay(True)
     for maze in frames:
         draw_interface(
             stdscr,
@@ -108,6 +135,8 @@ def animate_generation_curses(
             wall_color_index=wall_color_index,
         )
         curses.napms(20)
+    # stdscr.nodelay(False)
+    # stdscr.getch()
 
 
 def animate_path_curses(
@@ -118,6 +147,7 @@ def animate_path_curses(
     wall_color_index: int
 ) -> None:
     """Animate the solution path inside curses."""
+    # stdscr.nodelay(True)
     for i in range(len(path)):
         partial_path = path[:i + 1]
         draw_interface(
@@ -129,3 +159,23 @@ def animate_path_curses(
             wall_color_index=wall_color_index,
         )
         curses.napms(50)
+    # stdscr.nodelay(False)
+    # stdscr.getch()
+
+
+def print_bye_message(stdscr, offset_row: int = 0,
+                      offset_col: int = 0) -> None:
+    stdscr.erase()  # Clean screen
+    max_y, max_x = stdscr.getmaxyx()  # Max screen size
+    visible_width = max(0, max_x - 1)
+
+    for i in range(max_y):
+        src_row = offset_row + i  # We offset to start painting from scroll
+        if src_row >= len(BYE_MESSAGE):
+            break
+        full_line = BYE_MESSAGE[src_row]
+        end_col = offset_col + visible_width
+        visible_line = full_line[offset_col:end_col]  # Print from offset col
+        safe_addstr(stdscr, i, 0, visible_line)
+
+    stdscr.refresh()  # This is when we print!
