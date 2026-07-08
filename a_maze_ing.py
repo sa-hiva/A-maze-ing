@@ -13,9 +13,9 @@ from visual import animate_invalid_key_spam
 __all__ = ["save_maze_output"]
 
 MENU_TEMPLATE = [
-    "====================",
-    "        MENU        ",
-    "====================",
+    "*✧:･ﾟ✧*:･ﾟ✧*･ﾟ✧*:･ﾟ✧*",
+    "*✧      MENU       ✧*",
+    "*✧:･ﾟ✧*:･ﾟ✧*･ﾟ✧*:･ﾟ✧*",
     "",
     "1. New maze",
     "2. Show/Hide path",
@@ -87,63 +87,63 @@ def run(stdscr, config_path: str) -> None:
 
         try:
             key = stdscr.getch()  # Detects pressed key!
+
+            if key == curses.KEY_UP:
+                offset_row = max(0, offset_row - 1)
+            elif key == curses.KEY_DOWN:
+                offset_row = min(max_scroll_row, offset_row + 1)
+            elif key == curses.KEY_LEFT:
+                offset_col = max(0, offset_col - 1)
+            elif key == curses.KEY_RIGHT:
+                offset_col = min(max_scroll_col, offset_col + 1)
+            elif key == curses.KEY_RESIZE:
+                pass  # resize is managed by draw_interface
+
+            elif key == ord("1"):
+                solved = False
+                offset_row, offset_col = 0, 0
+                generator.reset()
+                maze, frames = generator.generate(width, height, entry_coords,
+                                                  exit_coords, perfect)
+                if animate_gen:
+                    animate_generation_curses(stdscr, frames, path,
+                                              solved, wall_color_index)
+                path = solve_maze(maze)
+                status_message = "Maze Generated!"
+
+            elif key == ord("2"):
+                solved = not solved
+                if animate_sol and solved:
+                    animate_path_curses(stdscr, maze, path,
+                                        solved, wall_color_index)
+                status_message = ""
+
+            elif key == ord("3"):
+                wall_color_index = next_wall_color_index(wall_color_index)
+
+            elif key == ord("4"):
+                animate_gen = not animate_gen
+                status_message = ""
+
+            elif key == ord("5"):
+                animate_sol = not animate_sol
+                status_message = ""
+
+            elif key == ord("6"):
+                print_bye_message(stdscr, offset_row, offset_col)
+                time.sleep(1)
+                break
+            else:
+                status_message = "Invalid option"
+                invalid_key_count += 1
+                if invalid_key_count > 0 and invalid_key_count % 3 == 0:
+                    animate_invalid_key_spam(stdscr,)
+                    status_message = ""
         except (EOFError, KeyboardInterrupt):
-            stdscr.addstr("[ERROR, INVALID KEY]")
+            stdscr.addstr("\n[ERROR, INVALID KEY]")
             stdscr.refresh()
             boom()
             sys.exit(1)
-
-        if key == curses.KEY_UP:
-            offset_row = max(0, offset_row - 1)
-        elif key == curses.KEY_DOWN:
-            offset_row = min(max_scroll_row, offset_row + 1)
-        elif key == curses.KEY_LEFT:
-            offset_col = max(0, offset_col - 1)
-        elif key == curses.KEY_RIGHT:
-            offset_col = min(max_scroll_col, offset_col + 1)
-        elif key == curses.KEY_RESIZE:
-            pass  # resize is managed by draw_interface
-
-        elif key == ord("1"):
-            solved = False
-            offset_row, offset_col = 0, 0
-            generator.reset()
-            maze, frames = generator.generate(width, height, entry_coords,
-                                              exit_coords, perfect)
-            if animate_gen:
-                animate_generation_curses(stdscr, frames, path,
-                                          solved, wall_color_index)
-            path = solve_maze(maze)
-            status_message = "Maze Generated!"
-
-        elif key == ord("2"):
-            solved = not solved
-            if animate_sol and solved:
-                animate_path_curses(stdscr, maze, path,
-                                    solved, wall_color_index)
-            status_message = ""
-
-        elif key == ord("3"):
-            wall_color_index = next_wall_color_index(wall_color_index)
-
-        elif key == ord("4"):
-            animate_gen = not animate_gen
-            status_message = ""
-
-        elif key == ord("5"):
-            animate_sol = not animate_sol
-            status_message = ""
-
-        elif key == ord("6"):
-            print_bye_message(stdscr, offset_row, offset_col)
-            time.sleep(1)
-            break
-        else:
-            status_message = "Invalid option"
-            invalid_key_count += 1
-            if invalid_key_count > 0 and invalid_key_count % 3 == 0:
-                animate_invalid_key_spam(stdscr,)
-                status_message = ""
 
 
 def main() -> None:
