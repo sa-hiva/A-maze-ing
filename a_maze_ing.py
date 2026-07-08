@@ -13,9 +13,9 @@ from visual import animate_invalid_key_spam
 __all__ = ["save_maze_output"]
 
 MENU_TEMPLATE = [
-    "====================",
-    "        MENU        ",
-    "====================",
+    "*✧:･ﾟ✧*:･ﾟ✧*･ﾟ✧*:･ﾟ✧*",
+    "*✧      MENU       ✧*",
+    "*✧:･ﾟ✧*:･ﾟ✧*･ﾟ✧*:･ﾟ✧*",
     "",
     "1. New maze",
     "2. Show/Hide path",

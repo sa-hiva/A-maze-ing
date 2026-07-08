@@ -29,7 +29,7 @@ def cell_label(
     elif (maze.matrix[row][col] in path):
         if solved is True:
             # return get_path_symbol(maze, row, col, path)
-            return " • "
+            return " ✧ "
         return "   "
     elif (maze.matrix[row][col].is_pattern):
         return "▒▒▒"
