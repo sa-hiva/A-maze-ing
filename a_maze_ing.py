@@ -10,7 +10,6 @@ from visual import next_wall_color_index
 from utils.io import boom
 from visual import animate_invalid_key_spam
 
-__all__ = ["save_maze_output"]
 
 MENU_TEMPLATE = [
     "*✧:･ﾟ✧*:･ﾟ✧*･ﾟ✧*:･ﾟ✧*",
@@ -30,6 +29,9 @@ MENU_TEMPLATE = [
 def build_menu_lines(animate_gen: bool, animate_sol: bool,
                      status_message: str,
                      generator: MazeGenerator) -> list[str]:
+    """Build the menu lines according to the current settings
+       and status message"""
+
     menu_lines = []
     for line in MENU_TEMPLATE:
         if line.startswith("1. "):
@@ -48,6 +50,12 @@ def build_menu_lines(animate_gen: bool, animate_sol: bool,
 
 
 def run(stdscr, config_path: str) -> None:
+    """Initialize the application and run the main curses event loop.
+
+    Loads the configuration, generates the maze, and handles all user
+    interactions until the program exits.
+    """
+
     curses.curs_set(0)     # Hides curses
     stdscr.keypad(True)    # activates detection of keypad
     curses.start_color()
@@ -162,6 +170,11 @@ def run(stdscr, config_path: str) -> None:
 
 
 def main() -> None:
+    """Start the maze application.
+
+       Validates command-line arguments, launches the curses interface
+       and manages exceptions.
+    """
     if len(sys.argv) != 2:
         print("Usage: python3 a_maze_ing.py <config_file>")
         sys.exit(1)

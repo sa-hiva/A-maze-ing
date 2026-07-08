@@ -45,6 +45,7 @@ def parse_config(file_path: str) -> dict[str, str]:
 
 
 def save_maze_output(file_path: str, maze: Maze, solution: str) -> None:
+
     try:
         with open(file_path, "w") as file:
             file.write(maze.to_hex_str())
@@ -63,6 +64,9 @@ def save_maze_output(file_path: str, maze: Maze, solution: str) -> None:
 
 
 def boom() -> None:
+    """Auto destructs the execution of the program.
+       Bye. Gone. Just like that."""
+    
     time.sleep(1)
     print(" Self-destruct in 3...")
     time.sleep(0.5)
