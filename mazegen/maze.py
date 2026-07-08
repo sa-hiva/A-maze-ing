@@ -1,51 +1,78 @@
 from .cell import Cell
 
+
 class Maze:
-    def __init__(self, width: int, height: int, entry: tuple[int, int], exit: tuple[int, int]) -> None:
+    def __init__(self, width: int,
+                 height: int,
+                 entry: tuple[int, int],
+                 exit: tuple[int, int],
+                 perfect: bool = False
+                 ) -> None:
+
         self.width = width
         self.height = height
         self.entry: tuple[int, int] = entry
         self.exit: tuple[int, int] = exit
-        self.matrix: list[list[Cell]] = [[None for _ in range(self.width)]
-                                         for _ in range(self.height)]
+        self.matrix: list[list[Cell]] = [
+            [Cell(row, col) for col in range(self.width)]
+            for row in range(self.height)]
+        self.solution: str
+        self.perfect = perfect
         self.validate_input()
-        self.init_maze()
-    
-    def get_hex_maze(self) -> list[list[int]]:
-        return [
-            [cell.walls for cell in row]
-            for row in self.matrix
-            ]
-    
-    def print_hex_maze(self) -> None:
-        hex_maze = self.get_hex_maze()
+
+    def to_hex_str(self) -> str:
+        str_maze: str = ""
         for row in self.matrix:
-            print([f"{cell.walls:X}" for cell in row])
-    
+            for cell in row:
+                str_maze += f"{cell.walls:X}"
+            str_maze += "\n"
+        return str_maze
+
+    @classmethod
+    def from_hex_str(cls,
+                     text: str,
+                     entry: tuple[int, int],
+                     exit: tuple[int, int],
+                     perfect: bool = False,
+                     ) -> "Maze":
+
+        lines = text.strip().splitlines()
+        height = len(lines)
+        width = len(lines[0])
+        if any(len(line) != width for line in lines):
+            raise ValueError("Maze is not rectangular")
+        maze = cls(width, height, entry, exit, perfect)
+        for row, line in enumerate(lines):
+            for col, char in enumerate(line):
+                maze.matrix[row][col].walls = int(char, 16)
+        return maze
+
     def validate_input(self) -> None:
         if self.width <= 0 or self.height <= 0:
-            raise ValueError ("Maze dimensions must be positive")
+            raise ValueError("Maze dimensions must be positive")
         if not self.is_in_matrix(self.entry):
-            raise ValueError ("Entry is outside maze bounds")
+            raise ValueError("Entry is outside maze bounds")
         if not self.is_in_matrix(self.exit):
-            raise ValueError ("Exit is outside maze bounds")
+            raise ValueError("Exit is outside maze bounds")
         if self.entry == self.exit:
             raise ValueError("Entry and Exit must be different")
-    
-    def init_maze(self):
+
+    def clear_visited(self) -> None:
         for row in range(self.height):
-            matrix_row = []
             for col in range(self.width):
-                matrix_col = Cell(row, col)
-                self.matrix[row][col] = Cell(row, col)
+                self.matrix[row][col].visited = False
+                self.matrix[row][col].previous = None
+
+    def get_cell(self, row: int, col: int) -> Cell:
+        return self.matrix[row][col]
 
     def is_in_matrix(self, pos: tuple[int, int]) -> bool:
         row, col = pos
         return 0 <= row < self.height and 0 <= col < self.width
-    
+
     def is_exit(self, cell: Cell) -> bool:
         return (cell.row, cell.col) == self.exit
-    
+
     @staticmethod
     def remove_walls(new: Cell, old: Cell) -> None:
         row_diff = new.row - old.row
@@ -64,7 +91,7 @@ class Maze:
         elif col_diff == 1:
             old.remove_wall('E')
             new.remove_wall('W')
-    
+
     @staticmethod
     def is_way_open(new: Cell, old: Cell) -> bool:
         row_diff = new.row - old.row
@@ -91,10 +118,10 @@ class Maze:
             neighbors.append(self.matrix[row + 1][col])
         if col > 0 and not self.matrix[row][col - 1].visited:
             neighbors.append(self.matrix[row][col - 1])
-        if col < self.width -1 and not self.matrix[row][col + 1].visited:
+        if col < self.width - 1 and not self.matrix[row][col + 1].visited:
             neighbors.append(self.matrix[row][col + 1])
         return neighbors
-    
+
     def get_unvisited_open_neighbors(self, cell: Cell) -> list[Cell]:
         neighbors: list[Cell] = self.get_unvisited_neighbors(cell)
         valid_neighbors: list[Cell] = []
@@ -102,3 +129,33 @@ class Maze:
             if self.is_way_open(neighbor, cell):
                 valid_neighbors.append(neighbor)
         return valid_neighbors
+
+    def get_closed_neighbors(self, cell: Cell) -> list[Cell]:
+        neighbors: list[Cell] = []
+        row = cell.row
+        col = cell.col
+        possibles: list[Cell] = []
+        if row > 0:
+            possibles.append(self.matrix[row - 1][col])
+        if row < self.height - 1:
+            possibles.append(self.matrix[row + 1][col])
+        if col > 0:
+            possibles.append(self.matrix[row][col - 1])
+        if col < self.width - 1:
+            possibles.append(self.matrix[row][col + 1])
+        for neighbor in possibles:
+            if (not self.is_way_open(cell, neighbor)
+               and not neighbor.is_pattern):
+                neighbors.append(neighbor)
+        return neighbors
+
+    def clone(self) -> "Maze":
+        from .generator import add_pattern
+        maze: "Maze" = Maze.from_hex_str(
+            self.to_hex_str(),
+            self.entry,
+            self.exit,
+            self.perfect,
+        )
+        add_pattern(maze)
+        return maze
