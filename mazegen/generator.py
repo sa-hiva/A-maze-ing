@@ -1,25 +1,25 @@
-from random import Random
+from random import Random, randint
 from .cell import Cell
 from .maze import Maze
 
 
 class MazeGenerator:
     def __init__(self, seed: int | None = None) -> None:
-        self.seed = seed
-        self.rng: Random = Random(seed) if seed is not None else Random()
+        self.reset(seed)
 
-    def reset(self) -> None:
-        self.rng = Random(self.seed) if self.seed is not None else Random()
+    def reset(self, seed: int | None = None) -> None:
+        self.maze_seed = seed if seed is not None else randint(0, 9999)
+        self.rng = Random(self.maze_seed)
 
     def generate(self, width: int,
                  height: int,
                  entry: tuple[int, int],
                  exit: tuple[int, int],
                  perfect: bool
-                 ) -> tuple[Maze, list[Maze]]:
+                 ) -> tuple[Maze, list[Maze], str]:
         maze: Maze = Maze(width, height, entry, exit, perfect)
         frames: list[Maze] = []
-        add_pattern(maze)
+        pattern_message:str = add_pattern(maze)
         row = self.rng.randrange(height)
         col = self.rng.randrange(width)
         first = maze.matrix[row][col]
@@ -31,13 +31,12 @@ class MazeGenerator:
         if not perfect:
             pacmanify(maze, frames, self.rng)
         maze.clear_visited()
-        return maze, frames
+        return maze, frames, pattern_message
 
 
-def add_pattern(maze: Maze) -> None:
+def add_pattern(maze: Maze) -> str:
     if maze.height < 7 or maze.width < 9:
-        print("Maze size too small: 42 pattern will be ommited")
-        return
+        return "Maze size too small: 42 pattern will be ommited"
     row: int = maze.height // 2 + maze.height % 2 - 3
     col: int = maze.width // 2 - 3
     pattern = ("  # ###",
@@ -51,6 +50,7 @@ def add_pattern(maze: Maze) -> None:
             cell.is_pattern = pattern[i][j] == "#"
             if cell.is_pattern:
                 cell.visited = True
+    return ""
 
 
 def visit(maze: Maze,

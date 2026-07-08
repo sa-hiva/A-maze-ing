@@ -1,13 +1,17 @@
+from pathlib import Path
+import os
 
 
 def validate(
     content: dict[str, str]
-) -> tuple[int, int, tuple[int, int], tuple[int, int], str, bool]:
+) -> tuple[int, int, tuple[int, int], tuple[int, int], str, bool, int]:
 
-    def read_int(key: str) -> int:
+    def read_int(key: str) -> int | None:
         raw_value = content.get(key)
-        if raw_value is None:
+        if raw_value is None and key != "SEED":
             raise ValueError(f"Error: Missing required parameter '{key}'")
+        if raw_value is None and key == "SEED":
+            return None
         try:
             return int(raw_value)
         except ValueError as error:
@@ -68,13 +72,25 @@ def validate(
 
     if not output_filename.endswith(".txt"):
         raise ValueError("Error: OUTPUT_FILE must end with '.txt'")
+    
+    path = Path(output_filename)
+
+    if not path.parent.exists():
+        raise ValueError("Error: Output directory does not exist.")
+    if not os.access(path.parent, os.W_OK):
+        raise PermissionError("Error: Cannot write to output directory.")
+    if path.exists():
+        raise FileExistsError("Error: Output file already exists.")
 
     perfect = parse_bool("PERFECT", True)
+    seed = read_int("SEED")
 
     return (
         width,
         height,
         entry_coords,
-        exit_coords,
+        exit_coords,    # if path.exists():
+    #     raise FileExistsError("Error: Output file already exists.")
         output_filename,
-        perfect)
+        perfect,
+        seed)

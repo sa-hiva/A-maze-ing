@@ -49,9 +49,9 @@ def save_maze_output(file_path: str, maze: Maze, solution: str) -> None:
         with open(file_path, "w") as file:
             file.write(maze.to_hex_str())
             file.write("\n")
-            file.write(f"{maze.entry[0]},{maze.entry[1]}")
+            file.write(f"{maze.entry[1]},{maze.entry[0]}")
             file.write("\n")
-            file.write(f"{maze.exit[0]},{maze.exit[1]}")
+            file.write(f"{maze.exit[1]},{maze.exit[0]}")
             file.write("\n")
             file.write(solution)
             file.write("\n")

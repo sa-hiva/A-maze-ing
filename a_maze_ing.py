@@ -28,9 +28,12 @@ MENU_TEMPLATE = [
 
 
 def build_menu_lines(animate_gen: bool, animate_sol: bool,
-                     status_message: str) -> list[str]:
+                     status_message: str,
+                     generator: MazeGenerator) -> list[str]:
     menu_lines = []
     for line in MENU_TEMPLATE:
+        if line.startswith("1. "):
+            line = (f"1. New maze (Current: maze n.{generator.maze_seed})")
         if line.startswith("4."):
             line = (f"4. Enable/Disable generator animations "
                     f"(Current: {'On' if animate_gen else 'Off'})")
@@ -59,13 +62,17 @@ def run(stdscr, config_path: str) -> None:
         exit_coords,
         output_file,
         perfect,
+        seed
     ) = validate(content)
 
     invalid_key_count = 0
     status_message = ""
-    generator = MazeGenerator()
-    maze, frames = generator.generate(width, height, entry_coords,
+    generator = MazeGenerator(seed)
+    maze, frames, pattern_msg = generator.generate(width, height, entry_coords,
                                       exit_coords, perfect)
+    if pattern_msg:
+        MENU_TEMPLATE[:0] = [pattern_msg, ""]
+
     path = solve_maze(maze)
     save_maze_output(output_file, maze, get_directions_from_path(path))
 
@@ -80,7 +87,8 @@ def run(stdscr, config_path: str) -> None:
                                   solved, wall_color_index)
 
     while True:
-        menu_lines = build_menu_lines(animate_gen, animate_sol, status_message)
+        menu_lines = build_menu_lines(animate_gen, animate_sol,
+                                      status_message, generator)
         max_scroll_row, max_scroll_col = draw_interface(
             stdscr, maze, path, solved, menu_lines,
             wall_color_index, offset_row, offset_col)
@@ -102,14 +110,21 @@ def run(stdscr, config_path: str) -> None:
             elif key == ord("1"):
                 solved = False
                 offset_row, offset_col = 0, 0
-                generator.reset()
-                maze, frames = generator.generate(width, height, entry_coords,
+                generator.reset(seed)
+                (maze,
+                 frames,
+                 pattern_msg) = generator.generate(width,height, entry_coords,
                                                   exit_coords, perfect)
+                if pattern_msg and MENU_TEMPLATE[0].startswith("*✧:･ﾟ"):
+                        MENU_TEMPLATE[:0] = [pattern_msg, ""]
+                elif not pattern_msg and MENU_TEMPLATE[0].startswith("Maze"):
+                    del MENU_TEMPLATE[:2]
+                    
                 if animate_gen:
                     animate_generation_curses(stdscr, frames, path,
                                               solved, wall_color_index)
                 path = solve_maze(maze)
-                status_message = "Maze Generated!"
+                status_message = ""
 
             elif key == ord("2"):
                 solved = not solved
@@ -142,8 +157,8 @@ def run(stdscr, config_path: str) -> None:
         except (EOFError, KeyboardInterrupt):
             stdscr.addstr("\n[ERROR, INVALID KEY]")
             stdscr.refresh()
-            boom()
-            sys.exit(1)
+            # boom()
+            # sys.exit(1)
 
 
 def main() -> None:
@@ -154,7 +169,7 @@ def main() -> None:
     try:
         # Wrapper sets up curses instead of doing it manually
         curses.wrapper(run, sys.argv[1])
-    except ValueError as error:
+    except (ValueError, PermissionError, FileExistsError) as error:
         print(error)
         sys.exit(1)
 
