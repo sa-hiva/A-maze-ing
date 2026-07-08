@@ -64,7 +64,7 @@ def save_maze_output(file_path: str, maze: Maze, solution: str) -> None:
 
 def boom() -> None:
     time.sleep(1)
-    print("Self-destruct in 3...")
+    print(" Self-destruct in 3...")
     time.sleep(1)
     print("2...")
     time.sleep(1)
