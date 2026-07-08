@@ -173,7 +173,179 @@ o        o
                .               .
                          .
         .                       .
+    """,
+       """
+
+
+
+          *
+       STOP PRESSING INVALID KEYS!!!!
+
+
+
+
+    """,
     """
+
+
+        ****
+        ****
+       STOP PRESSING INVALID KEYS!!!!
+
+
+
+
+    """,
+    """
+
+       * **
+      * *****
+      ** * ***
+       STOP PRESSING INVALID KEYS!!!!
+
+
+
+    """,
+    """
+        *
+      *   ***
+     *  ** * *                *
+      *      * *
+    ** STOP PRESSING INVALID KEYS!!!!
+          *
+
+
+    """,
+    """        +
+     +    +
+            ++              ****
+       ++  +  +              ***
+   + +        +  +
+  +    STOP PRESSING INVALID KEYS!!!!
+    + +  +
+          +
+
+    """,
+    """       oo
+    o     o                 *  **
+             oo           * *** *
+      ooo   o             * **
+  o o          oo            ** *
+       STOP PRESSING INVALID KEYS!!!!
+ o       o  o
+   o o
+          o
+    """,
+    """       o  o                *     *
+  o          o           *   *  ***
+              o             ** * *
+      ooo   o           *   *
+o  o            oo           * *  *
+       STOP PRESSING INVALID KEYS!!!!
+        o    o      *
+o        o
+ o  oo
+          o
+    """,
+    """:     :  :               +       ++
+              :        +     +  + +
+               :           ++  +
+     ::::    :        +
+                 :         + +
+  :    STOP PRESSING INVALID KEYS!!!!
+                  ****      +
+        :    :
+         :
+         :  ::
+    """,
+    """.         .               o      o  oo
+               .     o       o     o
+                .          oo  o
+    . ..            o
+      .      .    **      o
+ .     STOP PRESSING INVALID KEYS!!!!o
+                 **  ***.      o
+        .         ***      o
+              .
+         .
+    """,
+    """.         .                       o  oo
+               .    o       o       o
+                 .        oo    o
+    ..           **        o
+      ..      .  **
+       STOP PRESSING INVALID KEYS!!!!
+.               * * .* ***            o
+               ******    .      o
+        .        * *       o
+              .
+    """,
+    """                                  :   : :
+                  :         :        :
+                          ::
+                + +       ::    :
+                + +
+       STOP PRESSING INVALID KEYS!!!!
+                  +   +  +  ::
+              ++ +        +             :
+                + +++           :
+    """,
+    """                                   .     .
+                 .          .         .
+               o o         .
+                         ..      .
+              .o o
+       STOP PRESSING INVALID KEYS!!!!
+                 o    o  .o
+             o             oo
+            o o o                        .
+               o  ooo           .
+    """,
+    """                                    .     .
+              o.            .           .
+                 o        .
+              o         . .      .
+              o  o
+       STOP PRESSING INVALID KEYS!!!!
+                 o         o
+                       o.   o
+            o              .. o
+           oo   o   o                      .
+    """,
+    """
+             :
+                :
+             :
+              : :
+       STOP PRESSING INVALID KEYS!!!!
+                :           :
+                        :
+           :                 :
+         : :                    :
+    """,
+    """             .
+                .
+
+             .
+             .  .
+       STOP PRESSING INVALID KEYS!!!!
+                .            .
+                .             .
+                        .      .
+          .                      .
+    """,
+    """            .
+                .
+
+            .
+            .   .
+      .STOP PRESSING INVALID KEYS!!!!
+        .   .   .   .         .
+               .               .
+                         .
+        .                       .
+    """,
+    
 ]
 
 
