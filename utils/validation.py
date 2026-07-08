@@ -48,13 +48,12 @@ def validate(
 
         raise ValueError(
             f"Error: '{key}' must be either True or False")
-    
+
     def read_seed() -> int | None:
         raw_value = content.get("SEED")
         if not raw_value:
             return None
         return read_int("SEED")
-
 
     width = read_int("WIDTH")
     height = read_int("HEIGHT")
@@ -88,7 +87,7 @@ def validate(
         raise FileExistsError("Error: Output file already exists.")
 
     perfect = parse_bool("PERFECT", True)
-    seed = read_int("SEED")
+    seed = read_seed()
 
     return (
         width,
