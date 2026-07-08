@@ -6,12 +6,10 @@ def validate(
     content: dict[str, str]
 ) -> tuple[int, int, tuple[int, int], tuple[int, int], str, bool, int]:
 
-    def read_int(key: str) -> int | None:
+    def read_int(key: str) -> int:
         raw_value = content.get(key)
-        if raw_value is None and key != "SEED":
+        if raw_value is None:
             raise ValueError(f"Error: Missing required parameter '{key}'")
-        if raw_value is None and key == "SEED":
-            return None
         try:
             return int(raw_value)
         except ValueError as error:
@@ -50,6 +48,13 @@ def validate(
 
         raise ValueError(
             f"Error: '{key}' must be either True or False")
+    
+    def read_seed() -> int | None:
+        raw_value = content.get("SEED")
+        if not raw_value:
+            return None
+        return read_int("SEED")
+
 
     width = read_int("WIDTH")
     height = read_int("HEIGHT")
@@ -72,7 +77,7 @@ def validate(
 
     if not output_filename.endswith(".txt"):
         raise ValueError("Error: OUTPUT_FILE must end with '.txt'")
-    
+
     path = Path(output_filename)
 
     if not path.parent.exists():
@@ -89,8 +94,7 @@ def validate(
         width,
         height,
         entry_coords,
-        exit_coords,    # if path.exists():
-    #     raise FileExistsError("Error: Output file already exists.")
+        exit_coords,
         output_filename,
         perfect,
         seed)

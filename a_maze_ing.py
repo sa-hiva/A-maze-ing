@@ -69,7 +69,7 @@ def run(stdscr, config_path: str) -> None:
     status_message = ""
     generator = MazeGenerator(seed)
     maze, frames, pattern_msg = generator.generate(width, height, entry_coords,
-                                      exit_coords, perfect)
+                                                   exit_coords, perfect)
     if pattern_msg:
         MENU_TEMPLATE[:0] = [pattern_msg, ""]
 
@@ -113,13 +113,13 @@ def run(stdscr, config_path: str) -> None:
                 generator.reset(seed)
                 (maze,
                  frames,
-                 pattern_msg) = generator.generate(width,height, entry_coords,
-                                                  exit_coords, perfect)
+                 pattern_msg) = generator.generate(width, height, entry_coords,
+                                                   exit_coords, perfect)
                 if pattern_msg and MENU_TEMPLATE[0].startswith("*✧:･ﾟ"):
-                        MENU_TEMPLATE[:0] = [pattern_msg, ""]
+                    MENU_TEMPLATE[:0] = [pattern_msg, ""]
                 elif not pattern_msg and MENU_TEMPLATE[0].startswith("Maze"):
                     del MENU_TEMPLATE[:2]
-                    
+
                 if animate_gen:
                     animate_generation_curses(stdscr, frames, path,
                                               solved, wall_color_index)

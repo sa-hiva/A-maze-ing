@@ -19,7 +19,7 @@ class MazeGenerator:
                  ) -> tuple[Maze, list[Maze], str]:
         maze: Maze = Maze(width, height, entry, exit, perfect)
         frames: list[Maze] = []
-        pattern_message:str = add_pattern(maze)
+        pattern_message: str = add_pattern(maze)
         row = self.rng.randrange(height)
         col = self.rng.randrange(width)
         first = maze.matrix[row][col]
