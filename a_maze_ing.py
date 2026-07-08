@@ -33,10 +33,10 @@ def build_menu_lines(animate_gen: bool, animate_sol: bool,
     for line in MENU_TEMPLATE:
         if line.startswith("4."):
             line = (f"4. Enable/Disable generator animations "
-                    f"Current: {'On' if animate_gen else 'Off'})")
+                    f"(Current: {'On' if animate_gen else 'Off'})")
         elif line.startswith("5."):
             line = (f"5. Enable/Disable path animations "
-                    f"Current: {'On' if animate_sol else 'Off'})")
+                    f"(Current: {'On' if animate_sol else 'Off'})")
         menu_lines.append(line)
     menu_lines.append("Select an option: ")
     if status_message:
