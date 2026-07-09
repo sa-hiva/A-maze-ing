@@ -31,7 +31,7 @@ BYE_MESSAGE = [
 
 
 def safe_addstr(
-    stdscr,
+    stdscr: curses.window,
     row: int,
     col: int,
     text: str,
@@ -79,7 +79,7 @@ def build_all_lines(
 
 
 def draw_maze_line(
-    stdscr,
+    stdscr: curses.window,
     row: int,
     text: str,
     wall_color_index: int
@@ -101,7 +101,7 @@ def draw_maze_line(
 
 
 def draw_interface(
-    stdscr,
+    stdscr: curses.window,
     maze: Maze,
     path: list[Cell],
     solved: bool,
@@ -154,7 +154,7 @@ def draw_interface(
 
 
 def animate_generation_curses(
-    stdscr,
+    stdscr: curses.window,
     frames: list[Maze],
     path: list[Cell],
     solved: bool,
@@ -185,7 +185,7 @@ def animate_generation_curses(
 
 
 def animate_path_curses(
-    stdscr,
+    stdscr: curses.window,
     maze: Maze,
     path: list[Cell],
     solved: bool,
@@ -216,7 +216,7 @@ def animate_path_curses(
     stdscr.nodelay(False)
 
 
-def print_bye_message(stdscr, offset_row: int = 0,
+def print_bye_message(stdscr: curses.window, offset_row: int = 0,
                       offset_col: int = 0) -> None:
     """Displays the goodbye message.
 

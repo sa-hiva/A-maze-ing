@@ -57,7 +57,7 @@ def build_menu_lines(animate_gen: bool, animate_sol: bool,
     return menu_lines
 
 
-def run(stdscr, config_path: str) -> None:
+def run(stdscr: curses.window, config_path: str) -> None:
     """Initialize the application and run the main curses event loop.
 
     Loads the configuration, generates the maze, and handles all user

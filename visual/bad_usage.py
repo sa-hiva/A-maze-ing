@@ -985,7 +985,7 @@ RAGEQUIT_FRAMES = [
 ]
 
 
-def animate_invalid_key_spam(stdscr) -> None:
+def animate_invalid_key_spam(stdscr: curses.window) -> None:
     """Animates each frame from INVALID_KEY_FRAMES
 
       Args:
@@ -1004,7 +1004,7 @@ def animate_invalid_key_spam(stdscr) -> None:
     stdscr.nodelay(False)
 
 
-def boom(stdscr) -> None:
+def boom(stdscr: curses.window) -> None:
     """Auto destructs the execution of the program.
     Bye. Gone. Just like that."""
 
