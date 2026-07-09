@@ -7,11 +7,16 @@ name = "mazegen"
 version = "1.0.0"
 description = "A reusable maze generator and solver module for 42."
 readme = "README.md"
+license = "LICENSE.md"
 requires-python = ">=3.10"
+license = {file = "LICENSE.md"}
 authors = [
     { name = "valmoral", email = "valmoral@student.42urduliz.com" },
     { name = "shierro", email = "shierro@student.42urduliz.com" }
 ]
 
 [tool.setuptools.packages.find]
-include = ["mazegen"]
+include = ["mazegen*"]
+
+[tool.setuptools.package-data]
+mazegen = ["py.typed"]
