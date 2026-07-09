@@ -5,8 +5,32 @@ import os
 def validate(
     content: dict[str, str]
 ) -> tuple[int, int, tuple[int, int], tuple[int, int], str, bool, int]:
+    """Validate the parsed configuration.
+
+    Args:
+        content: Configuration parameters read from the config file.
+
+    Returns:
+        The validated maze settings.
+
+    Raises:
+        ValueError: If any configuration value is invalid.
+        PermissionError: If the output directory is not writable.
+        FileExistsError: If the output file already exists.
+    """
 
     def read_int(key: str) -> int:
+        """Read an integer configuration value.
+
+        Args:
+            key: Configuration key to read.
+
+        Returns:
+            The parsed integer value.
+
+        Raises:
+            ValueError: If the parameter is missing or is not an integer.
+        """
         raw_value = content.get(key)
         if raw_value is None:
             raise ValueError(f"Error: Missing required parameter '{key}'")
@@ -17,6 +41,16 @@ def validate(
                 f"Error: '{key}' must be an integer") from error
 
     def parse_coords(key: str, width: int, height: int) -> tuple[int, int]:
+        """Read and validate a coordinate pair.
+
+        Args:
+            key: Configuration key to read.
+            width: Maze width.
+            height: Maze height.
+
+        Returns:
+            The coordinates as (row, column).
+        """
         raw_value = content.get(key)
         if raw_value is None:
             raise ValueError(f"Error: Missing required parameter '{key}'")
@@ -36,6 +70,18 @@ def validate(
         return (y, x)
 
     def parse_bool(key: str, default: bool) -> bool:
+        """Read a boolean configuration value.
+
+        Args:
+            key: Configuration key to read.
+            default: Value to return if the parameter is missing.
+
+        Returns:
+            The parsed boolean value.
+
+        Raises:
+            ValueError: If the value is not True or False.
+        """
         raw_value = content.get(key)
         if raw_value is None or raw_value == "":
             return default
@@ -50,6 +96,11 @@ def validate(
             f"Error: '{key}' must be either True or False")
 
     def read_seed() -> int | None:
+        """Read the random seed from the configuration.
+
+        Returns:
+            The seed value, or None if no seed was provided.
+        """
         raw_value = content.get("SEED")
         if not raw_value:
             return None

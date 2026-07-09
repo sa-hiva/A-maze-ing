@@ -37,7 +37,15 @@ def safe_addstr(
     text: str,
     color_pair: int = 0
 ) -> None:
-    """Write text safely on screen, ignoring harmless curses edge errors."""
+    """Safely writes text to the curses window, ignoring screen boundary errors.
+
+    Args:
+        stdscr: Active curses screen.
+        row: Row position where the text is drawn.
+        col: Column position where the text is drawn.
+        text: Text to display.
+        color_pair: Optional curses color pair identifier.
+    """
     try:
         if color_pair > 0:
             stdscr.addstr(row, col, text, curses.color_pair(color_pair))
@@ -53,7 +61,16 @@ def build_all_lines(
     solved: bool,
     menu_lines: list[str]
 ) -> list[str]:
-    """Combine maze lines with menu lines into one scrollable view."""
+    """Combine maze lines with menu lines into one scrollable view.
+    Args:
+    maze: Maze instance to render.
+    path: Cells belonging to the current solution path.
+    solved: Whether the maze has been solved.
+    menu_lines: Additional menu lines to display.
+
+    Returns:
+        A list containing maze lines followed by menu lines.
+    """
     maze_lines = build_ascii_maze(maze, path, solved).split("\n")
 
     if not menu_lines:
@@ -67,9 +84,15 @@ def draw_maze_line(
     text: str,
     wall_color_index: int
 ) -> None:
-    """Draw one maze line, coloring only wall characters."""
-    wall_color_pair = get_wall_color_pair(wall_color_index)
+    """Draw one maze line, coloring only wall characters.
 
+    Args:
+    stdscr: Active curses screen.
+    row: Screen row where the line is drawn.
+    text: Maze line content.
+    wall_color_index: Color index used for wall rendering."""
+
+    wall_color_pair = get_wall_color_pair(wall_color_index)
     for col, char in enumerate(text):
         if is_wall_char(char):
             safe_addstr(stdscr, row, col, char, wall_color_pair)
@@ -87,7 +110,21 @@ def draw_interface(
     offset_row: int = 0,
     offset_col: int = 0
 ) -> tuple[int, int]:
-    """Draw maze and menu inside stdscr with scroll support."""
+    """Draw maze and menu inside stdscr with scroll support.
+
+    Args:
+    stdscr: Active curses screen.
+    maze: Maze instance to display.
+    path: Cells belonging to the current solution path.
+    solved: Whether the maze has been solved.
+    menu_lines: Menu content to display below the maze.
+    wall_color_index: Color index used for walls.
+    offset_row: Vertical scroll offset.
+    offset_col: Horizontal scroll offset.
+
+    Returns:
+    The maximum valid row and column scroll offsets."""
+
     stdscr.erase()
     max_y, max_x = stdscr.getmaxyx()
 
@@ -123,7 +160,15 @@ def animate_generation_curses(
     solved: bool,
     wall_color_index: int
 ) -> None:
-    """Animate maze generation inside curses."""
+    """Animate maze generation inside curses.
+
+    Args:
+    stdscr: Active curses screen.
+    frames: Sequence of maze states during generation.
+    path: Cells belonging to the solution path.
+    solved: Whether the maze is solved.
+    wall_color_index: Color index used for walls."""
+
     stdscr.nodelay(True)
     for maze in frames:
         draw_interface(
@@ -146,7 +191,15 @@ def animate_path_curses(
     solved: bool,
     wall_color_index: int
 ) -> None:
-    """Animate the solution path inside curses."""
+    """Animate the solution path inside curses.
+
+    Args:
+    stdscr: Active curses screen.
+    maze: Maze instance to display.
+    path: Cells representing the solution path.
+    solved: Whether the maze is solved.
+    wall_color_index: Color index used for walls."""
+
     stdscr.nodelay(True)
     for i in range(len(path)):
         partial_path = path[:i + 1]
@@ -165,6 +218,13 @@ def animate_path_curses(
 
 def print_bye_message(stdscr, offset_row: int = 0,
                       offset_col: int = 0) -> None:
+    """Displays the goodbye message.
+
+    Args:
+        stdscr: Active curses screen.
+        offset_row: Vertical scroll offset.
+        offset_col: Horizontal scroll offset."""
+
     stdscr.erase()  # Clean screen
     max_y, max_x = stdscr.getmaxyx()  # Max screen size
     visible_width = max(0, max_x - 1)

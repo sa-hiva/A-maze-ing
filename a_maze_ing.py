@@ -7,7 +7,6 @@ from utils import parse_config, validate, save_maze_output
 from visual import draw_interface, animate_generation_curses
 from visual import animate_path_curses, print_bye_message, init_colors
 from visual import next_wall_color_index
-# from utils.io import boom
 from visual import animate_invalid_key_spam
 
 
@@ -30,7 +29,16 @@ def build_menu_lines(animate_gen: bool, animate_sol: bool,
                      status_message: str,
                      generator: MazeGenerator) -> list[str]:
     """Build the menu lines according to the current settings
-       and status message"""
+       and status message
+   
+    Args:
+        animate_gen: Whether maze generation animations are enabled.
+        animate_sol: Whether solution path animations are enabled.
+        status_message: Message displayed alongside the menu prompt.
+        generator: Maze generator containing the current maze seed.
+
+    Returns:
+        A list of formatted menu lines."""
 
     menu_lines = []
     for line in MENU_TEMPLATE:
@@ -54,6 +62,10 @@ def run(stdscr, config_path: str) -> None:
 
     Loads the configuration, generates the maze, and handles all user
     interactions until the program exits.
+
+    Args:
+        stdscr: Active curses screen.
+        config_path: Path to the configuration file.
     """
 
     curses.curs_set(0)     # Hides curses

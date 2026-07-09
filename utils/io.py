@@ -1,8 +1,22 @@
 from mazegen import Maze
-import time
 
 
 def parse_config(file_path: str) -> dict[str, str]:
+    """Reads a configuration file containing one KEY=VALUE pair per line.
+    Blank lines and comments starting with '#' are ignored.
+
+    Args:
+        file_path: Path to the configuration file.
+
+    Returns:
+        A dictionary mapping configuration keys to their values.
+
+    Raises:
+        FileNotFoundError: If the configuration file does not exist.
+        PermissionError: If the configuration file cannot be read.
+        ValueError: If the configuration file contains invalid syntax,
+            duplicate keys, or empty parameter names.
+    """
     content: dict[str, str] = {}
 
     try:
@@ -45,6 +59,17 @@ def parse_config(file_path: str) -> dict[str, str]:
 
 
 def save_maze_output(file_path: str, maze: Maze, solution: str) -> None:
+    """Save a generated maze to an output file.
+
+    Args:
+        file_path: Destination output file.
+        maze: Maze to save.
+        solution: Shortest path encoded as movement directions.
+
+    Raises:
+        PermissionError: If the output file cannot be written.
+        FileNotFoundError: If the output file cannot be found
+    """
 
     try:
         with open(file_path, "w") as file:
@@ -61,18 +86,5 @@ def save_maze_output(file_path: str, maze: Maze, solution: str) -> None:
         raise PermissionError(
             f"Error: Permission denied writing output file "
             f"'{file_path}'") from error
-
-
-def boom() -> None:
-    """Auto destructs the execution of the program.
-       Bye. Gone. Just like that."""
-
-    time.sleep(1)
-    print(" Self-destruct in 3...")
-    time.sleep(0.5)
-    print("2...")
-    time.sleep(0.5)
-    print("1...")
-    time.sleep(0.5)
-    print("BOOM!\n")
-    time.sleep(0.5)
+    except FileNotFoundError:
+        raise FileNotFoundError("Output file not found")

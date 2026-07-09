@@ -2,12 +2,23 @@ from .cell import Cell
 
 
 class Maze:
+    """Represents a maze composed of interconnected cells."""
+
     def __init__(self, width: int,
                  height: int,
                  entry: tuple[int, int],
                  exit: tuple[int, int],
                  perfect: bool = False
                  ) -> None:
+        """Initialize a maze.
+
+        Args:
+            width: Number of cells in each row.
+            height: Number of cells in each column.
+            entry: Starting cell coordinates as (row, column).
+            exit: Ending cell coordinates as (row, column).
+            perfect: Whether the maze should contain no loops.
+        """
 
         self.width = width
         self.height = height
@@ -21,6 +32,12 @@ class Maze:
         self.validate_input()
 
     def to_hex_str(self) -> str:
+        """Convert the maze wall representation to hexadecimal format.
+
+        Returns:
+            A string where each hexadecimal character represents the walls
+            of one cell.
+        """
         str_maze: str = ""
         for row in self.matrix:
             for cell in row:
@@ -35,6 +52,20 @@ class Maze:
                      exit: tuple[int, int],
                      perfect: bool = False,
                      ) -> "Maze":
+        """Create a maze from a hexadecimal wall representation.
+
+        Args:
+            text: Hexadecimal string containing the maze data.
+            entry: Starting cell coordinates.
+            exit: Ending cell coordinates.
+            perfect: Whether the maze should be considered perfect.
+
+        Returns:
+            A Maze instance reconstructed from the provided data.
+
+        Raises:
+            ValueError: If the provided maze representation is invalid.
+        """
 
         lines = text.strip().splitlines()
         height = len(lines)
@@ -48,6 +79,12 @@ class Maze:
         return maze
 
     def validate_input(self) -> None:
+        """Validate maze dimensions and entry/exit positions.
+
+        Raises:
+            ValueError: If dimensions are invalid or entry/exit positions
+                are outside the maze bounds.
+        """
         if self.width <= 0 or self.height <= 0:
             raise ValueError("Maze dimensions must be positive")
         if not self.is_in_matrix(self.entry):
@@ -58,23 +95,59 @@ class Maze:
             raise ValueError("Entry and Exit must be different")
 
     def clear_visited(self) -> None:
+        """Reset the visited state and path information of every cell."""
         for row in range(self.height):
             for col in range(self.width):
                 self.matrix[row][col].visited = False
                 self.matrix[row][col].previous = None
 
     def get_cell(self, row: int, col: int) -> Cell:
+        """Retrieve a cell from the maze.
+
+        Args:
+            row: Cell row index.
+            col: Cell column index.
+
+        Returns:
+            The cell located at the specified coordinates.
+        """
         return self.matrix[row][col]
 
     def is_in_matrix(self, pos: tuple[int, int]) -> bool:
+        """Check whether a position belongs to the maze.
+
+        Args:
+            pos: Coordinates as (row, column).
+
+        Returns:
+            True if the position is inside the maze boundaries.
+        """
         row, col = pos
         return 0 <= row < self.height and 0 <= col < self.width
 
     def is_exit(self, cell: Cell) -> bool:
+        """Check whether a cell is the maze exit.
+
+        Args:
+            cell: Cell to check.
+
+        Returns:
+            True if the cell matches the exit coordinates.
+        """
         return (cell.row, cell.col) == self.exit
 
     @staticmethod
     def remove_walls(new: Cell, old: Cell) -> None:
+        """Remove the shared wall between two adjacent cells.
+
+        Args:
+            new: Destination cell.
+            old: Origin cell.
+
+        Raises:
+            ValueError: If the cells are not adjacent.
+        """
+
         row_diff = new.row - old.row
         col_diff = new.col - old.col
         if abs(row_diff) + abs(col_diff) != 1:
@@ -94,6 +167,19 @@ class Maze:
 
     @staticmethod
     def is_way_open(new: Cell, old: Cell) -> bool:
+        """Check whether two adjacent cells have an open passage.
+
+        Args:
+            new: First cell.
+            old: Second cell.
+
+        Returns:
+            True if both cells have the shared wall removed.
+
+        Raises:
+            ValueError: If the cells are not adjacent.
+        """
+
         row_diff = new.row - old.row
         col_diff = new.col - old.col
         if abs(row_diff) + abs(col_diff) != 1:
@@ -109,6 +195,15 @@ class Maze:
         return False
 
     def get_unvisited_neighbors(self, cell: Cell) -> list[Cell]:
+        """Get all adjacent cells that have not been visited.
+
+        Args:
+            cell: Cell whose neighbours will be searched.
+
+        Returns:
+            List of unvisited neighbouring cells.
+        """
+
         neighbors: list[Cell] = []
         row = cell.row
         col = cell.col
@@ -123,6 +218,14 @@ class Maze:
         return neighbors
 
     def get_unvisited_open_neighbors(self, cell: Cell) -> list[Cell]:
+        """Get unvisited neighbours connected by open passages.
+
+        Args:
+            cell: Cell whose neighbours will be searched.
+
+        Returns:
+            List of reachable unvisited neighbours.
+        """
         neighbors: list[Cell] = self.get_unvisited_neighbors(cell)
         valid_neighbors: list[Cell] = []
         for neighbor in neighbors:
@@ -131,6 +234,17 @@ class Maze:
         return valid_neighbors
 
     def get_closed_neighbors(self, cell: Cell) -> list[Cell]:
+        """Get neighbouring cells separated by a wall.
+
+        Pattern cells are ignored because they belong to the mandatory
+        decorative "42" structure.
+
+        Args:
+            cell: Cell whose neighbours will be searched.
+
+        Returns:
+            List of neighbouring cells with closed passages.
+        """
         neighbors: list[Cell] = []
         row = cell.row
         col = cell.col
@@ -150,6 +264,11 @@ class Maze:
         return neighbors
 
     def clone(self) -> "Maze":
+        """Create an independent copy of the maze.
+
+        Returns:
+            A new Maze instance with the same wall configuration.
+        """
         from .generator import add_pattern
         maze: "Maze" = Maze.from_hex_str(
             self.to_hex_str(),

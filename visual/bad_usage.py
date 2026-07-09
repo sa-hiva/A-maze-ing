@@ -1,4 +1,5 @@
 import curses
+import time
 from .interface_renderer import safe_addstr
 
 
@@ -348,8 +349,14 @@ o        o
 ]
 
 
+
+
 def animate_invalid_key_spam(stdscr) -> None:
-    """Animates each frame from INVALID_KEY_FRAMES"""
+    """Animates each frame from INVALID_KEY_FRAMES
+
+      Args:
+      stdscr: Active curses screen used for rendering the animation.
+      """
 
     stdscr.nodelay(True)  # Stop listening to keys while animating
     for frame in INVALID_KEY_FRAMES:
@@ -361,3 +368,18 @@ def animate_invalid_key_spam(stdscr) -> None:
 
     curses.flushinp()
     stdscr.nodelay(False)
+
+
+def boom() -> None:
+    """Auto destructs the execution of the program.
+       Bye. Gone. Just like that."""
+
+    time.sleep(1)
+    print(" Self-destruct in 3...")
+    time.sleep(0.5)
+    print("2...")
+    time.sleep(0.5)
+    print("1...")
+    time.sleep(0.5)
+    print("BOOM!\n")
+    time.sleep(0.5)

@@ -4,6 +4,18 @@ from mazegen import Maze, Cell
 def cell_label(
         maze: Maze, row: int, col: int,
         path: list[Cell], solved: bool) -> str:
+    """Returns the display symbol for a maze cell.
+
+    Args:
+        maze: Maze instance containing the cell.
+        row: Cell row position.
+        col: Cell column position.
+        path: Cells belonging to the solution path.
+        solved: Whether the maze has been solved.
+
+    Returns:
+        The text representation displayed for the cell."""
+
     if (row, col) == maze.entry:
         return "⋆S✮"
     elif (row, col) == maze.exit:
@@ -18,6 +30,14 @@ def cell_label(
 
 
 def top_border(maze: Maze) -> str:
+    """Builds the top border line of the ASCII maze.
+
+    Args:
+        maze: Maze instance to render.
+
+    Returns:
+        A string representing the maze top border."""
+
     parts = ["╔"]
 
     for col in range(maze.width):
@@ -34,6 +54,17 @@ def top_border(maze: Maze) -> str:
 
 
 def row_content(maze: Maze, row: int, path: list[Cell], solved: bool) -> str:
+    """Builds the content line for a maze row.
+
+    Args:
+        maze: Maze instance to render.
+        row: Row index to generate.
+        path: Cells belonging to the solution path.
+        solved: Whether the maze has been solved.
+
+    Returns:
+        A string representing the row contents."""
+
     parts: list[str] = []
 
     for col in range(maze.width):
@@ -56,6 +87,15 @@ def row_content(maze: Maze, row: int, path: list[Cell], solved: bool) -> str:
 
 
 def row_bottom(maze: Maze, row: int) -> str:
+    """Builds the bottom wall section of a maze row.
+
+    Args:
+        maze: Maze instance to render.
+        row: Row index to generate.
+
+    Returns:
+        A string representing the row bottom walls."""
+
     parts: list[str] = []
 
     for col in range(maze.width):
@@ -81,6 +121,14 @@ def manage_first_column_bottom(
     row: int,
     parts: list[str]
 ) -> None:
+    """Adds the left bottom character for a row bottom border.
+
+    Args:
+        cell: Current maze cell.
+        maze: Maze instance containing the cell.
+        row: Current row index.
+        parts: List collecting border characters."""
+
     if row == maze.height - 1:
         parts.append("╚")
         return
@@ -97,6 +145,14 @@ def manage_last_column_bottom(
     row: int,
     parts: list[str]
 ) -> None:
+    """Adds the rightt bottom character for a row bottom border.
+
+    Args:
+        cell: Current maze cell.
+        maze: Maze instance containing the cell.
+        row: Current row index.
+        parts: List collecting border characters."""
+
     if row == maze.height - 1:
         parts.append("╝")
         return
@@ -108,6 +164,13 @@ def manage_last_column_bottom(
 
 
 def bottom_border(maze: Maze) -> str:
+    """Builds the bottom border of the maze.
+
+    Args:
+        maze: Maze instance to render.
+
+    Returns:
+        A string representing the maze bottom border."""
     parts = ["╚"]
 
     last_row = maze.height - 1
@@ -131,6 +194,15 @@ def manage_connections_bottom(cell: Cell,
                               col: int,
                               parts: list[str]
                               ) -> None:
+    """Adds the correct character between 4 maze cells.
+
+    Args:
+        cell: Current maze cell.
+        maze: Maze instance containing the cell.
+        row: Current row index.
+        col: Current column index.
+        parts: List collecting border characters."""
+
     right: Cell = maze.matrix[row][col + 1]
     bottom: Cell = maze.matrix[row + 1][col]
     current_south = not cell.is_wall_open("S")
@@ -167,6 +239,16 @@ def manage_connections_bottom(cell: Cell,
 
 
 def build_ascii_maze(maze: Maze, path: list[Cell], solved: bool) -> str:
+    """Builds the complete ASCII representation of a maze.
+
+    Args:
+        maze: Maze instance to render.
+        path: Cells belonging to the solution path.
+        solved: Whether the maze has been solved.
+
+    Returns:
+        The maze rendered as a multiline string."""
+
     lines: list[str] = [top_border(maze)]
 
     for row in range(maze.height):
