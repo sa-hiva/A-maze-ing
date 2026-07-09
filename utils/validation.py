@@ -4,7 +4,7 @@ import os
 
 def validate(
     content: dict[str, str]
-) -> tuple[int, int, tuple[int, int], tuple[int, int], str, bool, int]:
+) -> tuple[int, int, tuple[int, int], tuple[int, int], str, bool, int | None]:
     """Validate the parsed configuration.
 
     Args:
@@ -134,8 +134,8 @@ def validate(
         raise ValueError("Error: Output directory does not exist.")
     if not os.access(path.parent, os.W_OK):
         raise PermissionError("Error: Cannot write to output directory.")
-    if path.exists():
-        raise FileExistsError("Error: Output file already exists.")
+    # if path.exists():
+    #     raise FileExistsError("Error: Output file already exists.")
 
     perfect = parse_bool("PERFECT", False)
     seed = read_seed()
