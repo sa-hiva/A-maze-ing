@@ -124,7 +124,7 @@ def animate_generation_curses(
     wall_color_index: int
 ) -> None:
     """Animate maze generation inside curses."""
-    # stdscr.nodelay(True)
+    stdscr.nodelay(True)
     for maze in frames:
         draw_interface(
             stdscr,
@@ -135,8 +135,8 @@ def animate_generation_curses(
             wall_color_index=wall_color_index,
         )
         curses.napms(20)
-    # stdscr.nodelay(False)
-    # stdscr.getch()
+    curses.flushinp()
+    stdscr.nodelay(False)
 
 
 def animate_path_curses(
@@ -147,7 +147,7 @@ def animate_path_curses(
     wall_color_index: int
 ) -> None:
     """Animate the solution path inside curses."""
-    # stdscr.nodelay(True)
+    stdscr.nodelay(True)
     for i in range(len(path)):
         partial_path = path[:i + 1]
         draw_interface(
@@ -159,8 +159,8 @@ def animate_path_curses(
             wall_color_index=wall_color_index,
         )
         curses.napms(50)
-    # stdscr.nodelay(False)
-    # stdscr.getch()
+    curses.flushinp()
+    stdscr.nodelay(False)
 
 
 def print_bye_message(stdscr, offset_row: int = 0,

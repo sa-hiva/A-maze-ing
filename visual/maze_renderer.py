@@ -1,38 +1,19 @@
 from mazegen import Maze, Cell
 
 
-def get_path_symbol(maze: Maze, row: int, col: int,
-                    path: list[Cell]) -> str:
-    cell: Cell = maze.matrix[row][col]
-    i: int = path.index(cell)
-    next: Cell = path[i + 1]
-    row_diff = next.row - cell.row
-    col_diff = next.col - cell.col
-    if row_diff == -1:
-        return " ↑ "
-    elif row_diff == 1:
-        return " ↓ "
-    elif col_diff == -1:
-        return " ← "
-    elif col_diff == 1:
-        return " → "
-    return " * "
-
-
 def cell_label(
         maze: Maze, row: int, col: int,
         path: list[Cell], solved: bool) -> str:
     if (row, col) == maze.entry:
-        return " 0 "
+        return "⋆S✮"
     elif (row, col) == maze.exit:
-        return " 0 "
+        return "✮E⋆"
     elif (maze.matrix[row][col] in path):
         if solved is True:
-            # return get_path_symbol(maze, row, col, path)
             return " ✧ "
         return "   "
     elif (maze.matrix[row][col].is_pattern):
-        return "▒▒▒"
+        return " ♥ "
     return "   "
 
 

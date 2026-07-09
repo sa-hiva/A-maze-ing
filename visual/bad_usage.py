@@ -351,6 +351,7 @@ o        o
 def animate_invalid_key_spam(stdscr) -> None:
     """Animates each frame from INVALID_KEY_FRAMES"""
 
+    stdscr.nodelay(True)  # Stop listening to keys while animating
     for frame in INVALID_KEY_FRAMES:
         stdscr.erase()
         for row, line in enumerate(frame.split("\n")):
@@ -358,7 +359,5 @@ def animate_invalid_key_spam(stdscr) -> None:
         stdscr.refresh()
         curses.napms(80)
 
-    stdscr.nodelay(True)  # Stop listening to keys while animating
-    while stdscr.getch() != -1:
-        pass
+    curses.flushinp()
     stdscr.nodelay(False)
