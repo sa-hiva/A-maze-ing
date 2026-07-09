@@ -7,7 +7,7 @@ from utils import parse_config, validate, save_maze_output
 from visual import draw_interface, animate_generation_curses
 from visual import animate_path_curses, print_bye_message, init_colors
 from visual import next_wall_color_index
-from utils.io import boom
+# from utils.io import boom
 from visual import animate_invalid_key_spam
 
 
