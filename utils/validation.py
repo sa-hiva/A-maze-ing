@@ -86,7 +86,7 @@ def validate(
     if path.exists():
         raise FileExistsError("Error: Output file already exists.")
 
-    perfect = parse_bool("PERFECT", True)
+    perfect = parse_bool("PERFECT", False)
     seed = read_seed()
 
     return (
