@@ -1,6 +1,7 @@
 import curses
 import time
 import sys
+import signal
 from .interface_renderer import safe_addstr
 
 
@@ -1007,34 +1008,39 @@ def animate_invalid_key_spam(stdscr: curses.window) -> None:
 def boom(stdscr: curses.window) -> None:
     """Auto destructs the execution of the program.
     Bye. Gone. Just like that."""
+    old_handler = signal.signal(signal.SIGINT, signal.SIG_IGN)
 
-    stdscr.nodelay(True)  # Stop listening to keys while animating
-    for frame in GLITCH_WARNING_FRAMES:
-        stdscr.erase()
-        for row, line in enumerate(frame.split("\n")):
-            safe_addstr(stdscr, row, 0, line)
+    try:
+        stdscr.nodelay(True)  # Stop listening to keys while animating
+        for frame in GLITCH_WARNING_FRAMES:
+            stdscr.erase()
+            for row, line in enumerate(frame.split("\n")):
+                safe_addstr(stdscr, row, 0, line)
+            stdscr.refresh()
+            curses.napms(200)
+        stdscr.clear()
         stdscr.refresh()
-        curses.napms(200)
-    stdscr.clear()
-    stdscr.refresh()
-    for _ in range(350):
-        print("I don't want to play anymore")
-        time.sleep(0.1)
-    stdscr.clear()
-    stdscr.refresh()
-    safe_addstr(stdscr, 1, 10, HEART_FRAME)
-    stdscr.refresh()
-    time.sleep(2)
-    for frame in RAGEQUIT_FRAMES:
-        stdscr.erase()
-        for row, line in enumerate(frame.split("\n")):
-            safe_addstr(stdscr, row, 0, line)
+        for _ in range(35):
+            print("I don't want to play anymore")
+            time.sleep(0.1)
+        stdscr.clear()
         stdscr.refresh()
-        curses.napms(1000)
-    for frame in EXPLOSION_FRAMES:
-        stdscr.erase()
-        for row, line in enumerate(frame.split("\n")):
-            safe_addstr(stdscr, row, 0, line)
+        safe_addstr(stdscr, 1, 10, HEART_FRAME)
         stdscr.refresh()
-        curses.napms(80)
-    sys.exit(1)
+        time.sleep(2)
+        for frame in RAGEQUIT_FRAMES:
+            stdscr.erase()
+            for row, line in enumerate(frame.split("\n")):
+                safe_addstr(stdscr, row, 0, line)
+            stdscr.refresh()
+            curses.napms(1000)
+        for frame in EXPLOSION_FRAMES:
+            stdscr.erase()
+            for row, line in enumerate(frame.split("\n")):
+                safe_addstr(stdscr, row, 0, line)
+            stdscr.refresh()
+            curses.napms(80)
+    finally:
+        signal.signal(signal.SIGINT, old_handler)
+        curses.endwin()
+        sys.exit(1)
