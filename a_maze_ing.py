@@ -7,8 +7,7 @@ from utils import parse_config, validate, save_maze_output
 from visual import draw_interface, animate_generation_curses
 from visual import animate_path_curses, print_bye_message, init_colors
 from visual import next_wall_color_index
-# from utils.io import boom
-from visual import animate_invalid_key_spam
+from visual import animate_invalid_key_spam, boom
 
 
 MENU_TEMPLATE = [
@@ -30,7 +29,16 @@ def build_menu_lines(animate_gen: bool, animate_sol: bool,
                      status_message: str,
                      generator: MazeGenerator) -> list[str]:
     """Build the menu lines according to the current settings
-       and status message"""
+       and status message
+
+    Args:
+        animate_gen: Whether maze generation animations are enabled.
+        animate_sol: Whether solution path animations are enabled.
+        status_message: Message displayed alongside the menu prompt.
+        generator: Maze generator containing the current maze seed.
+
+    Returns:
+        A list of formatted menu lines."""
 
     menu_lines = []
     for line in MENU_TEMPLATE:
@@ -49,11 +57,15 @@ def build_menu_lines(animate_gen: bool, animate_sol: bool,
     return menu_lines
 
 
-def run(stdscr, config_path: str) -> None:
+def run(stdscr: curses.window, config_path: str) -> None:
     """Initialize the application and run the main curses event loop.
 
     Loads the configuration, generates the maze, and handles all user
     interactions until the program exits.
+
+    Args:
+        stdscr: Active curses screen.
+        config_path: Path to the configuration file.
     """
 
     curses.curs_set(0)     # Hides curses
@@ -159,14 +171,19 @@ def run(stdscr, config_path: str) -> None:
             else:
                 status_message = "Invalid option"
                 invalid_key_count += 1
+                if invalid_key_count >= 7:
+                    boom(stdscr)
                 if invalid_key_count > 0 and invalid_key_count % 3 == 0:
-                    animate_invalid_key_spam(stdscr,)
+                    animate_invalid_key_spam(stdscr)
                     status_message = ""
         except (EOFError, KeyboardInterrupt):
-            stdscr.addstr("\n[ERROR, INVALID KEY]")
-            stdscr.refresh()
-            # boom()
-            # sys.exit(1)
+            status_message = "Invalid option"
+            invalid_key_count += 1
+            if invalid_key_count >= 7:
+                boom(stdscr)
+            if invalid_key_count > 0 and invalid_key_count % 3 == 0:
+                animate_invalid_key_spam(stdscr)
+                status_message = ""
 
 
 def main() -> None:
