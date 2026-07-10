@@ -171,7 +171,7 @@ def run(stdscr: curses.window, config_path: str) -> None:
             else:
                 status_message = "Invalid option"
                 invalid_key_count += 1
-                if invalid_key_count >= 10:
+                if invalid_key_count >= 7:
                     boom(stdscr)
                 if invalid_key_count > 0 and invalid_key_count % 3 == 0:
                     animate_invalid_key_spam(stdscr)
@@ -179,10 +179,10 @@ def run(stdscr: curses.window, config_path: str) -> None:
         except (EOFError, KeyboardInterrupt):
             status_message = "Invalid option"
             invalid_key_count += 1
-            if invalid_key_count == 10:
+            if invalid_key_count >= 7:
                 boom(stdscr)
             if invalid_key_count > 0 and invalid_key_count % 3 == 0:
-                animate_invalid_key_spam(stdscr,)
+                animate_invalid_key_spam(stdscr)
                 status_message = ""
 
 
