@@ -144,6 +144,7 @@ def run(stdscr: curses.window, config_path: str) -> None:
                     animate_generation_curses(stdscr, frames, path,
                                               solved, wall_color_index)
                 path = solve_maze(maze)
+                save_maze_output(output_file, maze, get_directions_from_path(path))
                 status_message = ""
 
             elif key == ord("2"):
