@@ -150,23 +150,27 @@ A simplified view of the current project organization is:
 .
 ├── a_maze_ing.py
 ├── config.txt
+├── LICENSE.md
+├── Makefile
+├── mazegen-1.0.0-py3-none-any.whl
 ├── pyproject.toml
-├── maze.txt
+├── README.md
 ├── mazegen/
 │   ├── __init__.py
 │   ├── cell.py
-│   ├── maze.py
 │   ├── generator.py
+│   ├── maze.py
 │   └── solver.py
-├── utils/
-│   ├── __init__.py
-│   ├── io.py
-│   └── validation.py
-└── visual/
+└── utils/
     ├── __init__.py
-    ├── maze_renderer.py
-    ├── interface_renderer.py
-    └── colors.py
+    ├── io.py
+    └── validation.py
+    └── visual/
+        ├── __init__.py
+        ├── bad_usage.py
+        ├── colors.py
+        ├── interface_renderer.py
+        └── maze_renderer.py
 ```
 
 This structure separates core maze logic, utility functions, and rendering responsibilities, which is consistent with the reusability objective of the subject.
