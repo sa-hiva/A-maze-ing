@@ -4,10 +4,10 @@ import time
 from mazegen import MazeGenerator
 from mazegen import solve_maze, get_directions_from_path
 from utils import parse_config, validate, save_maze_output
-from visual import draw_interface, animate_generation_curses
-from visual import animate_path_curses, print_bye_message, init_colors
-from visual import next_wall_color_index
-from visual import animate_invalid_key_spam, boom
+from utils.visual import draw_interface, animate_generation_curses
+from utils.visual import animate_path_curses, print_bye_message, init_colors
+from utils.visual import next_wall_color_index
+from utils.visual import animate_invalid_key_spam, boom
 
 
 MENU_TEMPLATE = [
@@ -144,7 +144,8 @@ def run(stdscr: curses.window, config_path: str) -> None:
                     animate_generation_curses(stdscr, frames, path,
                                               solved, wall_color_index)
                 path = solve_maze(maze)
-                save_maze_output(output_file, maze, get_directions_from_path(path))
+                save_maze_output(output_file, maze,
+                                 get_directions_from_path(path))
                 status_message = ""
 
             elif key == ord("2"):
